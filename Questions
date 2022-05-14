@@ -2,8 +2,7 @@
 
 ## Idea 1
 ### CREB Leukemia vs CREB normal Binding domain Transcription factors
-How do we know in encode if something has to do with Leukemia? How do we find the right data?
-CREB is an activating TF.
+How do we know in encode if something has to do with Leukemia or another disease? How do we find the best data if there are several options for data sets?
 Should we also look at other CREB family TFs more closely (other than CREB1)?
 If yes, what are the other family member's cofactors and are they on ENCODE?
 
@@ -14,5 +13,5 @@ Should we reproduce just some parts? Which figures or parts do you recommend to 
 
 ## General
 How can we summarize several data together?
-Can we share the link with each other you send me for working on R so we can work simultaneously?
-What is the best way to work together on GitHub?
+Can we share the link with each other you send Michelle for working on R so we can work simultaneously?
+What is the best way to work together on GitHub, just for code or also for text documents?
