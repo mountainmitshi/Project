@@ -1,0 +1,21 @@
+---
+title: "Project_1"
+author: "Sarah Eiben"
+date: '2022-06-13'
+output: html_document
+---
+
+# CREB family member and cofactor binding in K562 cells
+
+Outline:
+- Background
+- Aims
+- Hypothesis
+
+
+
+
+```{r}
+
+```
+
