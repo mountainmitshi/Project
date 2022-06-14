@@ -5,6 +5,23 @@ date: '2022-06-13'
 output: html_document
 ---
 
+# Install the newest version of epiwraps
+
+```{r}
+BiocManager::install("ETHZ-INS/epiwraps")
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(AnnotationHub)
+  library(Rsubread)
+  library(rtracklayer)
+  library(Biostrings)
+  library(Rfastp)
+  library(epiwraps)
+})
+```
+
 # Downloading the data
 In this file all the data is being downloaded from ENCODE.
 The data we use is CREB peaks and signal p-values (CREB1, CREB3, CREB3L1, CREB5), cofactor peaks and signal p-values (CREBBP, JUN, EP300, HDAC2) and acetylation peaks and signal p-values (H3K27ac). We saved them into different folders.
@@ -15,13 +32,13 @@ These are all IDR thresholded bed narrowpeaks, saved in a folder named peaks_cre
 ```{r}
 dir.create("peaks_creb")
 # CREB1
-download.file("https://www.encodeproject.org/files/ENCFF193LLN/@@download/ENCFF193LLN.bed.gz", dest="peaks_creb/peaks_creb1")
+download.file("https://www.encodeproject.org/files/ENCFF193LLN/@@download/ENCFF193LLN.bed.gz", dest="peaks_creb/peaks_creb1.bed.gz")
 # CREB3
-download.file("https://www.encodeproject.org/files/ENCFF829IEE/@@download/ENCFF829IEE.bed.gz", dest="peaks_creb/peaks_creb3")
+download.file("https://www.encodeproject.org/files/ENCFF829IEE/@@download/ENCFF829IEE.bed.gz", dest="peaks_creb/peaks_creb3.bed.gz")
 # CREB3L1
-download.file("https://www.encodeproject.org/files/ENCFF118GMS/@@download/ENCFF118GMS.bed.gz", dest="peaks_creb/peaks_creb3l1")
+download.file("https://www.encodeproject.org/files/ENCFF118GMS/@@download/ENCFF118GMS.bed.gz", dest="peaks_creb/peaks_creb3l1.bed.gz")
 # CREB5
-download.file("https://www.encodeproject.org/files/ENCFF875JMR/@@download/ENCFF875JMR.bed.gz", dest="peaks_creb/peaks_creb5")
+download.file("https://www.encodeproject.org/files/ENCFF875JMR/@@download/ENCFF875JMR.bed.gz", dest="peaks_creb/peaks_creb5.bed.gz")
 ```
 
 ## Downloading CREB signal p-value data
@@ -30,13 +47,13 @@ These are bigwig files saved in a folder named signal_pv_creb.
 ```{r}
 dir.create("signal_pv_creb")
 # CREB1
-download.file("https://www.encodeproject.org/files/ENCFF014CIM/@@download/ENCFF014CIM.bigWig", dest=("signal_pv_creb/signal_pv_creb1"))
+download.file("https://www.encodeproject.org/files/ENCFF014CIM/@@download/ENCFF014CIM.bigWig", dest=("signal_pv_creb/signal_pv_creb1.bw"))
 # CREB3
-download.file("https://www.encodeproject.org/files/ENCFF462EMG/@@download/ENCFF462EMG.bigWig", dest=("signal_pv_creb/signal_pv_creb3"))
+download.file("https://www.encodeproject.org/files/ENCFF462EMG/@@download/ENCFF462EMG.bigWig", dest=("signal_pv_creb/signal_pv_creb3.bw"))
 # CREB3L1
-download.file("https://www.encodeproject.org/files/ENCFF638ZCD/@@download/ENCFF638ZCD.bigWig", dest=("signal_pv_creb/signal_pv_creb3l1"))
+download.file("https://www.encodeproject.org/files/ENCFF638ZCD/@@download/ENCFF638ZCD.bigWig", dest=("signal_pv_creb/signal_pv_creb3l1.bw"))
 # CREB5
-download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF335JJU.bigWig", dest=("signal_pv_creb/Signal_pv_creb5"))
+download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF335JJU.bigWig", dest=("signal_pv_creb/Signal_pv_creb5.bw"))
 ```
 
 ## Downloading cofactor peaks
@@ -45,13 +62,13 @@ Downloading the peaks of the following cofactors: CREBBP, JUN, EP300 and HDAC2.
 ```{r}
 dir.create("peaks_cofactors")
 # CREBBP
-download.file("https://www.encodeproject.org/files/ENCFF532VPN/@@download/ENCFF532VPN.bed.gz", dest="peaks_cofactors/peaks_crebbp")
+download.file("https://www.encodeproject.org/files/ENCFF532VPN/@@download/ENCFF532VPN.bed.gz", dest="peaks_cofactors/peaks_crebbp.bed.gz")
 # JUN
-download.file("https://www.encodeproject.org/files/ENCFF865UPM/@@download/ENCFF865UPM.bed.gz", dest="peaks_cofactors/peaks_jun")
+download.file("https://www.encodeproject.org/files/ENCFF865UPM/@@download/ENCFF865UPM.bed.gz", dest="peaks_cofactors/peaks_jun.bed.gz")
 # EP300
-download.file("https://www.encodeproject.org/files/ENCFF702XPO/@@download/ENCFF702XPO.bed.gz", dest="peaks_cofactors/peaks_ep300")
+download.file("https://www.encodeproject.org/files/ENCFF702XPO/@@download/ENCFF702XPO.bed.gz", dest="peaks_cofactors/peaks_ep300.bed.gz")
 # HDAC2
-download.file("https://www.encodeproject.org/files/ENCFF150FJT/@@download/ENCFF150FJT.bed.gz", dest="peaks_cofactors//peaks_hdac2")
+download.file("https://www.encodeproject.org/files/ENCFF150FJT/@@download/ENCFF150FJT.bed.gz", dest="peaks_cofactors//peaks_hdac2.bed.gz")
 ```
 
 ## Downloading cofactor signal p-value
@@ -59,13 +76,13 @@ download.file("https://www.encodeproject.org/files/ENCFF150FJT/@@download/ENCFF1
 ```{r}
 dir.create("signal_pv_cofactors")
 # CREBBP
-download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp")
+download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp.bw")
 # JUN
-download.file("https://www.encodeproject.org/files/ENCFF220RDW/@@download/ENCFF220RDW.bigWig", dest="signal_pv_cofactors/signal_pv_jun")
+download.file("https://www.encodeproject.org/files/ENCFF220RDW/@@download/ENCFF220RDW.bigWig", dest="signal_pv_cofactors/signal_pv_jun.bw")
 # EP300
-download.file("https://www.encodeproject.org/files/ENCFF325DSL/@@download/ENCFF325DSL.bigWig", dest="signal_pv_cofactors/signal_pv_ep300")
+download.file("https://www.encodeproject.org/files/ENCFF325DSL/@@download/ENCFF325DSL.bigWig", dest="signal_pv_cofactors/signal_pv_ep300.bw")
 # HDAC2
-download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF240UFL.bigWig", dest="signal_pv_cofactors/signal_pv_hdac2")
+download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF240UFL.bigWig", dest="signal_pv_cofactors/signal_pv_hdac2.bw")
 ```
 
 ## Downloading H3K27ac peaks and signal p-value
@@ -73,9 +90,24 @@ download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF2
 ```{r}
 dir.create("H3K27ac")
 # H3K27ac peaks
-download.file("https://www.encodeproject.org/files/ENCFF437DPT/@@download/ENCFF437DPT.bed.gz", dest="H3K27ac/h3k27ac_peaks")
+download.file("https://www.encodeproject.org/files/ENCFF437DPT/@@download/ENCFF437DPT.bed.gz", dest="H3K27ac/h3k27ac_peaks.bed.gz")
 # H3K27ac signal p-value
-download.file("https://www.encodeproject.org/files/ENCFF469JMR/@@download/ENCFF469JMR.bigWig", dest="H3K27ac/h3k27ac_signal_pv")
+download.file("https://www.encodeproject.org/files/ENCFF469JMR/@@download/ENCFF469JMR.bigWig", dest="H3K27ac/h3k27ac_signal_pv.bw")
+```
+# Reading in the data
+
+```{r}
+# Creb peaks
+peaks_creb1 <- import("peaks_creb/peaks_creb1.bed.gz", format="NarrowPeak")
+peaks_creb3 <- import("peaks_creb/peaks_creb3.bed.gz", format="NarrowPeak")
+peaks_creb3l1 <- import("peaks_creb/peaks_creb3l1.bed.gz", format="NarrowPeak")
+peaks_creb5 <- import("peaks_creb/peaks_creb5.bed.gz", format="NarrowPeak")
+
+# Cofactor peaks
+peaks_crebbp <- import("peaks_cofactors/peaks_crebbp.bed.gz", format="NarrowPeak")
+peaks_jun <- import("peaks_cofactors/peaks_jun.bed.gz", format="NarrowPeak")
+peaks_ep300 <- import("peaks_cofactors/peaks_ep300.bed.gz", format="NarrowPeak")
+peaks_hdac2 <- import("peaks_cofactors/peaks_hdac2.bed.gz", format="NarrowPeak")
 ```
 
 
