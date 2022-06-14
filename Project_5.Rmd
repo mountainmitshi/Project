@@ -1,0 +1,13 @@
+---
+title: "Project_5"
+author: "Sarah Eiben"
+date: '2022-06-14'
+output: html_document
+---
+
+# Using rGreat to know the effect of the CREB binding sites
+
+```{r}
+
+```
+
