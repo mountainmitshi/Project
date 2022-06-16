@@ -1,11 +1,11 @@
 ---
-title: "Project_5"
+title: "Project_6"
 author: "Sarah Eiben"
-date: '2022-06-14'
+date: '2022-06-16'
 output: html_document
 ---
 
-# Adding the cofactors and one methylation to the analysis
+# Doing the previous things for the whole genome
 
 ```{r}
 
