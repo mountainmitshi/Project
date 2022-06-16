@@ -8,14 +8,16 @@ output: html_document
 # CREB family member and cofactor binding in K562 cells
 
 Outline:
-- Background
-- Aims
-- Hypothesis
+- Introduction
+- Results
+- Methods
+- Discussion
+- References
 
 
-
+## Introduction
 
 ```{r}
-
+sessionInfo()
 ```
 

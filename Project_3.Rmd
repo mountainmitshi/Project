@@ -80,3 +80,8 @@ regionUpset(listofRegions, reference = peaks_creb5_chr1)
 # How do these plots make sense?
 
 Explain here how we can make sense of these.
+
+
+```{r}
+sessionInfo()
+```

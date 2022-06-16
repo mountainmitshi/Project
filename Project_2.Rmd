@@ -47,13 +47,13 @@ These are bigwig files saved in a folder named signal_pv_creb.
 ```{r}
 dir.create("signal_pv_creb")
 # CREB1
-download.file("https://www.encodeproject.org/files/ENCFF014CIM/@@download/ENCFF014CIM.bigWig", dest=("signal_pv_creb/signal_pv_creb1.bw"))
+download.file("https://www.encodeproject.org/files/ENCFF014CIM/@@download/ENCFF014CIM.bigWig", dest=("signal_pv_creb/signal_pv_creb1.bw"), mode="wb")
 # CREB3
-download.file("https://www.encodeproject.org/files/ENCFF462EMG/@@download/ENCFF462EMG.bigWig", dest=("signal_pv_creb/signal_pv_creb3.bw"))
+download.file("https://www.encodeproject.org/files/ENCFF462EMG/@@download/ENCFF462EMG.bigWig", dest=("signal_pv_creb/signal_pv_creb3.bw"), mode="wb")
 # CREB3L1
-download.file("https://www.encodeproject.org/files/ENCFF638ZCD/@@download/ENCFF638ZCD.bigWig", dest=("signal_pv_creb/signal_pv_creb3l1.bw"))
+download.file("https://www.encodeproject.org/files/ENCFF638ZCD/@@download/ENCFF638ZCD.bigWig", dest=("signal_pv_creb/signal_pv_creb3l1.bw"), mode="wb")
 # CREB5
-download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF335JJU.bigWig", dest=("signal_pv_creb/Signal_pv_creb5.bw"))
+download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF335JJU.bigWig", dest=("signal_pv_creb/Signal_pv_creb5.bw"), mode="wb")
 ```
 
 ## Downloading cofactor peaks
@@ -76,13 +76,13 @@ download.file("https://www.encodeproject.org/files/ENCFF150FJT/@@download/ENCFF1
 ```{r}
 dir.create("signal_pv_cofactors")
 # CREBBP
-download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp.bw")
+download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp.bw", mode="wb")
 # JUN
-download.file("https://www.encodeproject.org/files/ENCFF220RDW/@@download/ENCFF220RDW.bigWig", dest="signal_pv_cofactors/signal_pv_jun.bw")
+download.file("https://www.encodeproject.org/files/ENCFF220RDW/@@download/ENCFF220RDW.bigWig", dest="signal_pv_cofactors/signal_pv_jun.bw", mode="wb")
 # EP300
-download.file("https://www.encodeproject.org/files/ENCFF325DSL/@@download/ENCFF325DSL.bigWig", dest="signal_pv_cofactors/signal_pv_ep300.bw")
+download.file("https://www.encodeproject.org/files/ENCFF325DSL/@@download/ENCFF325DSL.bigWig", dest="signal_pv_cofactors/signal_pv_ep300.bw", mode="wb")
 # HDAC2
-download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF240UFL.bigWig", dest="signal_pv_cofactors/signal_pv_hdac2.bw")
+download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF240UFL.bigWig", dest="signal_pv_cofactors/signal_pv_hdac2.bw", mode="wb")
 ```
 
 ## Downloading H3K27ac peaks and signal p-value
@@ -92,12 +92,12 @@ dir.create("H3K27ac")
 # H3K27ac peaks
 download.file("https://www.encodeproject.org/files/ENCFF437DPT/@@download/ENCFF437DPT.bed.gz", dest="H3K27ac/h3k27ac_peaks.bed.gz")
 # H3K27ac signal p-value
-download.file("https://www.encodeproject.org/files/ENCFF469JMR/@@download/ENCFF469JMR.bigWig", dest="H3K27ac/h3k27ac_signal_pv.bw")
+download.file("https://www.encodeproject.org/files/ENCFF469JMR/@@download/ENCFF469JMR.bigWig", dest="H3K27ac/h3k27ac_signal_pv.bw", mode="wb")
 ```
-# Reading in the data
+# Reading in the peak data
 
 ```{r}
-# Creb peaks
+# CREB peaks
 peaks_creb1 <- import("peaks_creb/peaks_creb1.bed.gz", format="NarrowPeak")
 peaks_creb3 <- import("peaks_creb/peaks_creb3.bed.gz", format="NarrowPeak")
 peaks_creb3l1 <- import("peaks_creb/peaks_creb3l1.bed.gz", format="NarrowPeak")
@@ -109,6 +109,20 @@ peaks_jun <- import("peaks_cofactors/peaks_jun.bed.gz", format="NarrowPeak")
 peaks_ep300 <- import("peaks_cofactors/peaks_ep300.bed.gz", format="NarrowPeak")
 peaks_hdac2 <- import("peaks_cofactors/peaks_hdac2.bed.gz", format="NarrowPeak")
 ```
+# Reading in the signal p-value data
+
+This can be ignored, I just added it so we can follow our train of thoughts.
+This apparently only works on windows when you add the mode="bw" part in the end
+Bigwig files don't have to be downlowaded
+
+```{r}
+# try something pierre told me to:
+download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp.bw", mode="wb")
+# CREB signal p-value
+pv_creb1 <- import.bw("signal_pv_cofactors/signal_pv_crebbp.bw", format="bw")
+```
 
 
-
+```{r}
+sessionInfo()
+```

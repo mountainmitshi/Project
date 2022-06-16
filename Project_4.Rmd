@@ -7,7 +7,46 @@ output: html_document
 
 # Clustering of the signals and enrichment analysis
 
-```{r}
+Help for this in the code from lecture 9.
 
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(epiwraps)
+  library(ggplot2)
+  library(rGREAT)
+  library(AnnotationHub)
+  library(Rsubread)
+  library(rtracklayer)
+  library(Biostrings)
+  library(Rfastp)
+  library(ensembldb)
+  library(bsseq)
+  library(BiocParallel)
+  library(edgeR)
+  library(DMRcate)
+})
+```
+## Plotting the signals
+
+As regions we are going to be using the peaks from the different CREB family members that we downloaded in Project_2 and the tracks are the corresponding signal p-values.
+We make a list of the signal p-values of the CREB family members.
+We also make a list of the peak values and merge them together to create one long list of non-overlapping regions.
+Then we combine these in a matrix and create a heatmap.
+
+```{r}
+# create a list with all the peaks on chromosome 1
+peak_list <- GRangesList("Peaks CREB1"=peaks_creb1_chr1, "Peaks CREB3"=peaks_creb3_chr1, "Peaks CREB3L1"=peaks_creb3l1_chr1, "Peaks CREB5"=peaks_creb5_chr1, compress=TRUE)
+# merge the peaks together to create one list of non-overlapping regions
+merged_peaks <- reduce(unlist(peak_list))
+# make a list of the signal p-values
+pv_list <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw")
+# we obtain the matrix of the signal around the regions:
+m_creb1 <- signal2Matrix(pv_list, merged_peaks)
 ```
 
+
+
+```{r}
+sessionInfo()
+```
