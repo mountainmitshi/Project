@@ -43,9 +43,121 @@ merged_peaks <- reduce(unlist(peak_list))
 pv_list <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw")
 # we obtain the matrix of the signal around the regions:
 m_creb1 <- signal2Matrix(pv_list, merged_peaks)
+# maybe set an extend and a width?
+plotEnrichedHeatmaps(m_creb1)
+```
+Each row represents the same region across the heatmaps.
+
+Analyze this more!
+
+## Clustering
+Now we use clustering to set rows that are similar together and seperate them from the rest.
+Let's start by trying with 5 clusters.
+
+
+```{r}
+cl <- clusterSignalMatrices(m_creb1, k=10)
+# with 5 clusters 73% of the variance is explained by clusters
+# with 4 clusters 64 % of the variance is explained by clusters
+# with 6 clusters 77%
+# with 7 clusters 80%
+# with 8 clusters 82%
+# with 9 clusters 84%
+# with 10 clusters 85%
+# with 11 clusters 86%
+# so let's go with 10 clusters for a start and see what we can tell.
+table(cl)
+head(cl)
+length(cl)
+# The numbers at [1] tell you where your regions are: first region is in cluster 1 with 303 elements
+merged_peaks$cluster <- cl
 ```
 
+### Plotting the clusters
+We can split the rows by clusters to visualize this.
+The meaning of the cluster is dependent on the order of the matrix, which depends on the order of the rows in the regions.
+It's really easy if you generate another regions list and you order them and you keep the same cluster identities everything will be messed up!
+Keep in mind that the orders of both of them need to be matched when you change something.
+Typically when your clusters are exhausting most of the pattern in the data, the results are more stable. For reproducibility of workflows it is important to set the seed.
 
+```{r}
+set.seed(123)
+plotEnrichedHeatmaps(m_creb1, row_split=cl)
+```
+Interpret this!
+
+The curves at the top is the average signal across all the regions but with clusters we have multiple lines. But we cannot tell which one is which.
+So we set colors.
+
+#### Adding colors
+
+```{r}
+# create a vector of colors and have as names of the vector the names of our clusters (in this case just numbers).
+mycolors <- c("1"="yellow", "2"="orange", "3"="red", "4"="pink", "5"="purple", "6"="blue", "7"="green", "8"="brown", "9"="gray", "10"="black")
+plotEnrichedHeatmaps(m_creb1, row_split=cl, mean_color=mycolors, trim=c(0.95))
+```
+## Plotting just the averages
+
+Sometimes we want to just extract the average signals, we can also do this by cluster.
+This gives us a data frame that has for each cluster for each sample or signal at each position what is the mean signal.
+We can use this to plot a plot that tells us in each cluster what are the average signals of each factor around the positions around the regions of interest.
+
+```{r}
+d <- meltSignals(m_creb1, splitBy=cl)
+ggplot(d, aes(position, mean, colour=sample)) + geom_line(size=1.2) + facet_wrap(~split)
+```
+
+These plots are exactly like the plots above the heat maps with the difference that instead of plotting the different lines for one signal together we are plotting the lines for one cluster but different signals together. You can plot whatever you want.
+
+Clustering is dangerous because you might change around factors until you like the result.
+
+# Enrichment analysis
+
+Now we want to figure out what the regions are. For example what are the regions in cluster 1, are they associated with or close to genes that have a different kind of function than the regions in cluster 5?
+Typically you add more signals in order to find more patterns of correlation. Are they bound by other factors?.
+
+Find what's enriched in one cluster with respect to the others:
+
+```{r}
+# we first split the regions by cluster:
+split_regions <- split(merged_peaks, cl)
+# IMPORTANT: when you submit a job to GREAT you need to submit a set of regions, a GRanges object, but you also need to submit a background. You are always comparing the elements in your list of regions to other elements, so we are comparing the regions in cluster 6 with respect to all our other regions.
+# sending the data to the server
+job <- submitGreatJob(split_regions[["6"]], merged_peaks, species="hg38")
+#Human GRCh38/hg38 is the genome we used
+job
+# we fetch the data back
+res <- getEnrichmentTables(job)
+names(res)
+```
+Molecular function is about being enzymes, signalling proteins, biological process is what they are involved in and cellular component is where they work. This gives us an overview.
+
+## Plotting the top Biological Processes
+
+```{r, fig.width=9, fig.height=6}
+# looking at the biological processes
+bp <- res$`GO Biological Process`
+head(bp)
+# reorder it from most to least statistically significant before being alphabetically ordered.
+ggplot(head(bp,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at the molecular function
+mf <- res$`GO Molecular Function`
+head(mf)
+ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at cellular components
+cc <- res$`GO Cellular Component`
+ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+```
+We get different genotology terms and it is telling you how many regions in our background are associated with this term and how many regions in our foreground, so the gene of interest are associated with this.
+Fold Enrichment is how much more you have in your region of interest than in the background.
+
+X axis is strength of enrichment and color of the dot is the significance.
+Smaller sets need more enrichment in order to be significant than large sets. That's why we look at both the significance and the fold enrichment which indicates the magnitude of enrichment.
+But not everything makes sense because the same genes get reused in many biological processes. But we can learn something about what the clusters do.
+
+Now we only did this for cluster 6 compared to all clusters. We need to do more comparisons like this and figure out what cluster stands for what.
 
 ```{r}
 sessionInfo()
