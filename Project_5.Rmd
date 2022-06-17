@@ -7,9 +7,97 @@ output: html_document
 
 # Adding the cofactors and one methylation to the analysis
 
-```{r}
+## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 1 AND the cofactors and methylation
 
+```{r}
+listofRegions_cf <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, crebbp=peaks_crebbp, jun=peaks_jun, ep300=peaks_ep300, hdac2=peaks_hdac2, h3k27ac=peaks_h3k27ac)
+regionOverlaps(listofRegions_cf)
+regionUpset(listofRegions_cf)
 ```
+### Creating different regionOverlap plots and regionUpset plots to see it more clearly
+
+```{r}
+# CREBBP
+listofRegions_crebbp <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, crebbp=peaks_crebbp)
+regionOverlaps(listofRegions_crebbp)
+regionUpset(listofRegions_crebbp)
+```
+
+```{r}
+# JUN
+listofRegions_jun <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, jun=peaks_jun)
+regionOverlaps(listofRegions_jun)
+regionUpset(listofRegions_jun)
+```
+
+```{r}
+# EP300
+listofRegions_ep300 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, ep300=peaks_ep300)
+regionOverlaps(listofRegions_ep300)
+regionUpset(listofRegions_ep300)
+```
+```{r}
+# HDAC2
+listofRegions_hdac2 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, hdac2=peaks_hdac2)
+regionOverlaps(listofRegions_hdac2)
+regionUpset(listofRegions_hdac2)
+```
+```{r}
+# H3K27ac
+listofRegions_h3k27ac <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, h3k27ac=peaks_h3k27ac)
+regionOverlaps(listofRegions_h3k27ac)
+regionOverlaps(listofRegions_h3k27ac, cluster = length(listofRegions_h3k27ac))
+regionUpset(listofRegions_h3k27ac)
+regionUpset(listofRegions_h3k27ac, reference = peaks_creb1_chr1)
+```
+To analyze these we can set the reference to different CREB family members which might give us some different information.
+Figure out if we want to add clusters in the regionOverlaps.
+
+
+## Doing analysis according to clusters
+
+Let's look at how the different clusters interact with the cofactors and the methylation.
+
+```{r}
+# get the regions on the cofactors and the methylation for just chromosome 1
+# CREBBP
+peaks_crebbp_chr1 <- peaks_crebbp[seqnames(peaks_crebbp)=="chr1"]
+# CREB3
+peaks_jun_chr1 <- peaks_jun[seqnames(peaks_jun)=="chr1"]
+# CREB3L1
+peaks_ep300_chr1 <- peaks_ep300[seqnames(peaks_ep300)=="chr1"]
+# CREB5
+peaks_hdac2_chr1 <- peaks_hdac2[seqnames(peaks_hdac2)=="chr1"]
+# H3K27ac
+peaks_h3k27ac_chr1 <- peaks_h3k27ac[seqnames(peaks_h3k27ac)=="chr1"]
+```
+
+```{r}
+# create a list with all the peaks on chromosome 1
+peak_list_cf <- GRangesList("Peaks CREB1"=peaks_creb1_chr1, "Peaks CREB3"=peaks_creb3_chr1, "Peaks CREB3L1"=peaks_creb3l1_chr1, "Peaks CREB5"=peaks_creb5_chr1, "Peaks CREBBP"=peaks_crebbp_chr1, "Peaks JUN"=peaks_jun_chr1, "Peaks EP300"=peaks_ep300_chr1, "Peaks HDAC2"=peaks_hdac2_chr1, "Peaks H3K27ac"=peaks_h3k27ac_chr1, compress=TRUE)
+# merge the peaks together to create one list of non-overlapping regions
+merged_peaks_cf <- reduce(unlist(peak_list_cf))
+# make a list of the signal p-values
+pv_list_cf <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw", CREBBP="signal_pv_cofactors/signal_pv_crebbp.bw", JUN="signal_pv_cofactors/signal_pv_jun.bw", EP300="signal_pv_cofactors/signal_pv_ep300.bw", HDAC2="signal_pv_cofactors/signal_pv_hdac2.bw", H3K27ac="H3K27ac/h3k27ac_signal_pv.bw")
+# we obtain the matrix of the signal around the regions:
+m_creb1_cf <- signal2Matrix(pv_list_cf, merged_peaks_cf)
+# maybe set an extend and a width?
+plotEnrichedHeatmaps(m_creb1_cf)
+```
+### Cluster
+
+```{r}
+cl <- clusterSignalMatrices(m_creb1_cf, k=5)
+# 10 clusters explain 96% of the variance
+# 5 clusters explain 91% of the variance
+merged_peaks_cf$cluster <- cl
+```
+```{r}
+set.seed(124)
+plotEnrichedHeatmaps(m_creb1_cf, row_split=cl)
+```
+
+Adjust the normalization.
 
 ```{r}
 sessionInfo()

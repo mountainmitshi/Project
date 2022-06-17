@@ -132,7 +132,7 @@ names(res)
 ```
 Molecular function is about being enzymes, signalling proteins, biological process is what they are involved in and cellular component is where they work. This gives us an overview.
 
-## Plotting the top Biological Processes
+## Plotting the top Biological Processes, molecular functions and cellular components
 
 ```{r, fig.width=9, fig.height=6}
 # looking at the biological processes
