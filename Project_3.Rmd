@@ -7,7 +7,7 @@ output: html_document
 
 # Region access
 
-Using the functions OverlapsAny, regionOverlaps and regionUpset we analyse the access of the DNA by the different CREB family members.
+Using the functions regionOverlaps and regionUpset we analyse the access of the DNA by the different CREB family members.
 
 First we do everything just for Chromosome 1 to get an idea, then we move on to the whole genome.
 

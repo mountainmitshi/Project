@@ -58,6 +58,7 @@ download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF3
 
 ## Downloading cofactor peaks
 Downloading the peaks of the following cofactors: CREBBP, JUN, EP300 and HDAC2.
+Maybe we won't need these - then we will just delete this chunk again.
 
 ```{r}
 dir.create("peaks_cofactors")
@@ -108,7 +109,12 @@ peaks_crebbp <- import("peaks_cofactors/peaks_crebbp.bed.gz", format="NarrowPeak
 peaks_jun <- import("peaks_cofactors/peaks_jun.bed.gz", format="NarrowPeak")
 peaks_ep300 <- import("peaks_cofactors/peaks_ep300.bed.gz", format="NarrowPeak")
 peaks_hdac2 <- import("peaks_cofactors/peaks_hdac2.bed.gz", format="NarrowPeak")
+
+# H3K27ac peaks
+peaks_h3k27ac <- import("H3K27ac/h3k27ac_peaks.bed.gz", format="NarrowPeak")
 ```
+
+
 # Reading in the signal p-value data
 
 This can be ignored, I just added it so we can follow our train of thoughts.
