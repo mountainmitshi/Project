@@ -7,6 +7,8 @@ output: html_document
 
 # Clustering of the signals and enrichment analysis
 
+Our second approach to compare the different family members with eachother is to cluster the signals and do an enrichment analysis with the clusters. After plotting the signals in a combined heatmap, the signals will be clustered and analyzed in an enrichment analysis.
+
 Help for this in the code from lecture 9.
 
 ```{r}
@@ -31,8 +33,8 @@ suppressPackageStartupMessages({
 
 As regions we are going to be using the peaks from the different CREB family members that we downloaded in Project_2 and the tracks are the corresponding signal p-values.
 We make a list of the signal p-values of the CREB family members.
-We also make a list of the peak values and merge them together to create one long list of non-overlapping regions.
-Then we combine these in a matrix and create a heatmap.
+Then we also make a list of the peak values and merge them together to create one long list of non-overlapping regions.
+Finally we combine these in a matrix and create a heatmap.
 
 ```{r}
 # create a list with all the peaks on chromosome 1
@@ -48,11 +50,14 @@ plotEnrichedHeatmaps(m_creb1)
 ```
 Each row represents the same region across the heatmaps.
 
-Analyze this more!
+Here you can see that there are strongest peaks in CREB3L1, followed by similar looking CREB1 and CREB3 and rather weak looking CREB5.
+
+Analyze this more (not sure if I can speak of strengths of peaks here or what would be correct?).
 
 ## Clustering
+
 Now we use clustering to set rows that are similar together and seperate them from the rest.
-Let's start by trying with 5 clusters.
+Let's start by trying with 5 clusters. Then we change the number of clusters until we reach a plateau of the variance explained by clusters.
 
 
 ```{r}
@@ -69,22 +74,34 @@ cl <- clusterSignalMatrices(m_creb1, k=10)
 table(cl)
 head(cl)
 length(cl)
-# The numbers at [1] tell you where your regions are: first region is in cluster 1 with 303 elements
+# The numbers at [1] tell you where your regions are: first region is in cluster 10 with 303 elements
 merged_peaks$cluster <- cl
 ```
 
 ### Plotting the clusters
+
 We can split the rows by clusters to visualize this.
 The meaning of the cluster is dependent on the order of the matrix, which depends on the order of the rows in the regions.
-It's really easy if you generate another regions list and you order them and you keep the same cluster identities everything will be messed up!
-Keep in mind that the orders of both of them need to be matched when you change something.
-Typically when your clusters are exhausting most of the pattern in the data, the results are more stable. For reproducibility of workflows it is important to set the seed.
+It's really easy if one generates another regions list that is ordered  and one keeps the same cluster identities everything will be messed up!
+We have to keep in mind that the orders of both of them need to be matched when something is changed.
+Typically when clusters are exhausting most of the pattern in the data, the results are more stable. For reproducibility of workflows it is important to set the seed, we chose to set the seed at 123.
 
 ```{r}
 set.seed(123)
 plotEnrichedHeatmaps(m_creb1, row_split=cl)
 ```
-Interpret this!
+Interpretation:
+
+Cluster 1: Represented in all CREB family members except for CREB5.
+Cluster 2: Weak representation in all but CREB3.
+Cluster 3: A cluster of few regions strong in CREB1 and CREB3L1.
+Cluster 4: Medium representation in CREB1, CREB3 and CREB3L1 and barely any representation in CREB5.
+Cluster 5: Strong in CREB3 and one of the few that is also represented quite strongly in CREB5.
+Cluster 6: Strong in CREB1 and CREB3L1.
+Cluster 7: Similar to Cluster 6.
+Cluster 8: Seems to be something especially strongly represented by CREB1.
+Cluster 9: A cluster of few regions remarkably strong and broad peaked in CREB3.
+Cluster 10: Similar to clusters 6 and 7 but broader and stronger peaks.
 
 The curves at the top is the average signal across all the regions but with clusters we have multiple lines. But we cannot tell which one is which.
 So we set colors.
@@ -96,11 +113,13 @@ So we set colors.
 mycolors <- c("1"="yellow", "2"="orange", "3"="red", "4"="pink", "5"="purple", "6"="blue", "7"="green", "8"="brown", "9"="gray", "10"="black")
 plotEnrichedHeatmaps(m_creb1, row_split=cl, mean_color=mycolors, trim=c(0.95))
 ```
+Bring the curves into the representation!
+
 ## Plotting just the averages
 
-Sometimes we want to just extract the average signals, we can also do this by cluster.
-This gives us a data frame that has for each cluster for each sample or signal at each position what is the mean signal.
-We can use this to plot a plot that tells us in each cluster what are the average signals of each factor around the positions around the regions of interest.
+We tried to extract the average signals to get a more broad overview of the signals, we can also do this by cluster.
+This gives us a data frame that has for each cluster for each sample or signal at each position the value of the mean signal.
+We can use this to create a plot that tells us in each cluster what the average signals of each factor around the positions around the regions of interest are.
 
 ```{r}
 d <- meltSignals(m_creb1, splitBy=cl)
@@ -111,17 +130,21 @@ These plots are exactly like the plots above the heat maps with the difference t
 
 Clustering is dangerous because you might change around factors until you like the result.
 
+From this plot we can generally tell once more that CREB5 is not very strongly involved in any of these peaks. All the other family members have some clusters that they are the strongest representative which means they might be strongly involved in whatever these processes represent.
+
+More analyis here?
+
 # Enrichment analysis
 
 Now we want to figure out what the regions are. For example what are the regions in cluster 1, are they associated with or close to genes that have a different kind of function than the regions in cluster 5?
-Typically you add more signals in order to find more patterns of correlation. Are they bound by other factors?.
+Typically you add more signals in order to find more patterns of correlation. Are they bound by other factors?
 
 Find what's enriched in one cluster with respect to the others:
 
 ```{r}
 # we first split the regions by cluster:
 split_regions <- split(merged_peaks, cl)
-# IMPORTANT: when you submit a job to GREAT you need to submit a set of regions, a GRanges object, but you also need to submit a background. You are always comparing the elements in your list of regions to other elements, so we are comparing the regions in cluster 6 with respect to all our other regions.
+# Important: when a job is submitted to GREAT a set of regions, a GRanges object, needs to be submitted BUT there also needs to be some sort of background added to the picture. The elements in a list of regions are always compared to other elements. So we are comparing the regions in cluster 6 with respect to all our other regions.
 # sending the data to the server
 job <- submitGreatJob(split_regions[["6"]], merged_peaks, species="hg38")
 #Human GRCh38/hg38 is the genome we used
@@ -150,12 +173,14 @@ ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), siz
 cc <- res$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
-We get different genotology terms and it is telling you how many regions in our background are associated with this term and how many regions in our foreground, so the gene of interest are associated with this.
-Fold Enrichment is how much more you have in your region of interest than in the background.
+We get different genotology terms and it is telling us how many regions in our background are associated with this term and how many regions in our foreground, so the genes of interest are associated with this.
+Fold Enrichment is how much more we have in our region of interest than in the background.
 
-X axis is strength of enrichment and color of the dot is the significance.
+On the x-axis is the strength of enrichment and the color of the dot represents its significance.
 Smaller sets need more enrichment in order to be significant than large sets. That's why we look at both the significance and the fold enrichment which indicates the magnitude of enrichment.
-But not everything makes sense because the same genes get reused in many biological processes. But we can learn something about what the clusters do.
+Disclaimer: not everything makes sense because the same genes get reused in many biological processes, but we can learn something about what the clusters do.
+
+Analyze this:
 
 Now we only did this for cluster 6 compared to all clusters. We need to do more comparisons like this and figure out what cluster stands for what.
 
