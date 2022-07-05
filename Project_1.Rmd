@@ -1,9 +1,10 @@
 ---
 title: "Project_1"
-author: "Sarah Eiben"
-date: '2022-06-13'
+author: "Sarah Eiben, Michelle Baumgarnter, Deni Hodzic"
+date: "`r Sys.Date()`"
 output: html_document
 ---
+
 
 # CREB family member and cofactor binding in K562 cells
 
@@ -16,8 +17,9 @@ Outline:
 
 
 ## Introduction
+Our group project focused on comparing the binding of different CREB familiy members and cofactors in K562 cells. 
 
+CREB is an important element in the cAMP signalling pathway, which is bound to the DNA in it's inactive state. CREB is then activated by active catalytic domains and ATP molecules. After conversion, phosphorylated CREB can bind to different cofactors, which stimulates the transcription of targeted genes. We know that variouse CREB family members exist yet only understand the function of CREB1 better at the moment. In this project work we thus want to focus on finding the binding domains of CREB1, CREB3, CREB3L1 and CREB5. Comparing these which each other and in a further step look at the interaction with H3K27ac and CREB cofactors (CREBBP, JUN, EP300, HDAC2) at these discovered domains. We hope to thus understand the function of the individual CREB family members better at the end of our analysis. 
 ```{r}
 sessionInfo()
 ```
-
