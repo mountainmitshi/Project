@@ -57,7 +57,7 @@ download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF3
 ```
 
 ## Downloading cofactor peaks
-Downloading the peaks of the following cofactors: CREBBP, JUN, EP300 and HDAC2.
+Downloading the peaks of the following cofactors: CREBBP, JUN, EP300 and HDAC2 into a folder named peaks_cofactors.
 Maybe we won't need these - then we will just delete this chunk again.
 
 ```{r}
@@ -73,6 +73,7 @@ download.file("https://www.encodeproject.org/files/ENCFF150FJT/@@download/ENCFF1
 ```
 
 ## Downloading cofactor signal p-value
+Download of cofactor signal p-values (CREBBP, JUN, EP300 and HDAC2) in bigwig format into a folder named signal_pc_covactors.
 
 ```{r}
 dir.create("signal_pv_cofactors")
@@ -87,6 +88,7 @@ download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF2
 ```
 
 ## Downloading H3K27ac peaks and signal p-value
+Downloading the Acetylation peaks (bed narrow peaks) and p-values (bigwig) of H3K27ac into a folder named H2K27ac.
 
 ```{r}
 dir.create("H3K27ac")
@@ -96,6 +98,7 @@ download.file("https://www.encodeproject.org/files/ENCFF437DPT/@@download/ENCFF4
 download.file("https://www.encodeproject.org/files/ENCFF469JMR/@@download/ENCFF469JMR.bigWig", dest="H3K27ac/h3k27ac_signal_pv.bw", mode="wb")
 ```
 # Reading in the peak data
+In this chunk we are reading in the peak data in order to use it later.
 
 ```{r}
 # CREB peaks
@@ -117,9 +120,8 @@ peaks_h3k27ac <- import("H3K27ac/h3k27ac_peaks.bed.gz", format="NarrowPeak")
 
 # Reading in the signal p-value data
 
-This can be ignored, I just added it so we can follow our train of thoughts.
-This apparently only works on windows when you add the mode="bw" part in the end
-Bigwig files don't have to be downlowaded
+This step is added in order to follow our train of thoughts and process.
+First we downloaded and read everything in without the mode="bw" which does not work on windows. Hence we had to redo this time-consuming step and add the mode.
 
 ```{r}
 # try something pierre told me to:
