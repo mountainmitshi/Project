@@ -5,11 +5,30 @@ date: '2022-06-14'
 output: html_document
 ---
 
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(epiwraps)
+  library(ggplot2)
+  library(rGREAT)
+  library(AnnotationHub)
+  library(Rsubread)
+  library(rtracklayer)
+  library(Biostrings)
+  library(Rfastp)
+  library(ensembldb)
+  library(bsseq)
+  library(BiocParallel)
+  library(edgeR)
+  library(DMRcate)
+})
+```
+
 # Region access
 
 Using the functions regionOverlaps and regionUpset we analyse the access of the DNA by the different CREB family members.
 
-First we do everything just for Chromosome 1 to get an idea, then we move on to the whole genome.
+First we do everything just for Chromosome 1 to get an idea, then we move on to the whole genome (project part 6).
 
 ## Restricting all of the CREB family memeber peaks to just chromosome 1
 
@@ -46,6 +65,8 @@ plotEnrichedHeatmaps(peakSignals_creb1_chr1, raster_by_magick=FALSE)
 
 ## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 1
 
+First we create an Overlap of the peaks of chromosome 1 of all CREB family members and an Upsetplot of the same regions.
+
 Look at lecture 5 code for this!
 
 ```{r}
@@ -56,11 +77,15 @@ regionUpset(listofRegions)
 
 ## Restricting to CREB1 sites
 
+Here we tried out how the upsetplot changes when we restrict it to CREB1.
+
 ```{r}
 regionUpset(listofRegions, reference = peaks_creb1_chr1)
 ```
 
 ## Restricting to CREB3 sites
+
+Here we tried out how the upsetplot changes when we restrict it to CREB3.
 
 ```{r}
 regionUpset(listofRegions, reference = peaks_creb3_chr1)
@@ -68,10 +93,13 @@ regionUpset(listofRegions, reference = peaks_creb3_chr1)
 
 ## Restricting to CREB3L1 sites
 
+Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
+
 ```{r}
 regionUpset(listofRegions, reference = peaks_creb3l1_chr1)
 ```
 ## Restricting to CREB5 sites
+Here we tried out how the upsetplot changes when we restrict it to CREB5.
 
 ```{r}
 regionUpset(listofRegions, reference = peaks_creb5_chr1)
@@ -79,7 +107,21 @@ regionUpset(listofRegions, reference = peaks_creb5_chr1)
 
 # How do these plots make sense?
 
-Explain here how we can make sense of these.
+We can see in the RegionOverlap plot that CREB3L1 and CREB1 have the most overlapping regions followed by CREB3L1 and CREB3, then CREB1 and CREB3. CREB5 does not seem to overlap much with any of the other regions.
+
+In the unrestricted RegionUpset these findings are reproduced and you can see additionally that CREB1, CREB3L1 and CREB3 have many common intersections that are shared amongst the 3 of them.
+CREB1 and CREB3L1 share by far the most intersections.
+
+When restricting the RegionUpset plot to CREB1 you can see that it shares most intersections with CREB3L1 followed by CREB3. The intersection number of CREB3L1, CREB1 and CREB3 is again shown to be quite high.
+
+Restriction to CREB3 shows that intersections with CREB3L1 are highest, followed by CREB1 and then CREB5.
+
+The order intersections of CREB3L1 is from high to low: CREB1, CREB3, CREB5, where the intersections with CREB5 are almost inexistent.
+
+CREB5 seems to have very few intersections with the other family members but most with CREB3.
+
+Intersection size is generally decreasing in the following order: CREB3L1, CREB1, CREB3, CREB5.
+
 
 
 ```{r}
