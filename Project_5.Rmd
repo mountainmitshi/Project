@@ -99,8 +99,38 @@ pv_list_cf <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_c
 # we obtain the matrix of the signal around the regions:
 m_creb1_cf <- signal2Matrix(pv_list_cf, merged_peaks_cf)
 # maybe set an extend and a width?
-plotEnrichedHeatmaps(m_creb1_cf)
+plotEnrichedHeatmaps(m_creb1_cf, row_title="Clustered analysis")
 ```
+
+As you can see in the average plots, the basic normalization based on library size wasn't quite sufficient. While the size of the peak in the middle depends on the amount of the protein, we would expect the background around it to flatten to a similar level across experiments, which isn't the case.
+
+Thus we try to correct for this by trying two approaches.
+
+### Approach 1: Plot groups of experiments and combine
+
+The first approach is to plot two groups of experiments seperately, so that they have their own color scale and then join them afterwarts.
+
+```{r}
+plotEnrichedHeatmaps(m_creb1_cf[1:6]) + plotEnrichedHeatmaps(m_creb1_cf[7:9])
+```
+
+### Approach 2: Re-normalization
+
+The second approach is to re-normalize the signals. This can be done with the function renormalizeBorders (2a).
+An even better way to do this is to first estimate the background noise based on the whole genome and then use those to normalize our matrices (2b). Let's try both and compare.
+
+```{r}
+# Approach 2a
+plotEnrichedHeatmaps(renormalizeBorders(m_creb1_cf), row_title = "Approach 2a")
+#Approach 2b
+nf <- bwNormFactors(pv_list_cf)
+m_crebl_cf_normalized <- rescaleSignalMatrices(m_creb1_cf, nf)
+plotEnrichedHeatmaps(m_crebl_cf_normalized, row_title = "Approach 2b0")
+```
+
+Gives me an error but also 2 heatmaps???
+
+
 ### Cluster
 
 ```{r}
