@@ -7,11 +7,98 @@ output: html_document
 
 # Doing the previous things for the whole genome
 
-This was initially our goal but as we had neither enough processing power or time to let this all run for the whole genome we selected one more chromosome based on this paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC387762/
-The chosen chromosome would be chromosome 22, since according to this paper CREB1 binds to many sites on this chromosome.
+We are trying to do this for the whole genome:
 
 ```{r}
+listofRegions_whole <- list(creb1=peaks_creb1, creb3=peaks_creb3, creb3l1=peaks_creb3l1, creb5=peaks_creb5)
+regionOverlaps(listofRegions_whole)
+regionUpset(listofRegions_whole)
+```
 
+## Restricting to CREB1 sites
+
+Here we tried out how the upsetplot changes when we restrict it to CREB1.
+
+```{r}
+regionUpset(listofRegions_whole, reference = peaks_creb1)
+```
+## Restricting to CREB3 sites
+
+Here we tried out how the upsetplot changes when we restrict it to CREB3.
+
+```{r}
+regionUpset(listofRegions_whole, reference = peaks_creb3)
+```
+
+## Restricting to CREB3L1 sites
+
+Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
+
+```{r}
+regionUpset(listofRegions_whole, reference = peaks_creb3l1)
+```
+
+## Restricting to CREB3L1 sites
+
+Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
+
+```{r}
+regionUpset(listofRegions_whole, reference = peaks_creb3l1)
+```
+
+## Restricting to CREB5 sites
+Here we tried out how the upsetplot changes when we restrict it to CREB5.
+
+```{r}
+regionUpset(listofRegions_whole, reference = peaks_creb5)
+```
+# How do these plots make sense?
+
+Interpret them!
+
+# Clustering of the signals and enrichment analysis
+
+## Plotting the signals
+
+```{r}
+# create a list with all the peaks on the whole genome
+peak_list_whole <- GRangesList("Peaks CREB1"=peaks_creb1, "Peaks CREB3"=peaks_creb3, "Peaks CREB3L1"=peaks_creb3l1, "Peaks CREB5"=peaks_creb5, compress=TRUE)
+# merge the peaks together to create one list of non-overlapping regions
+merged_peaks_whole <- reduce(unlist(peak_list))
+# make a list of the signal p-values
+pv_list_whole <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw")
+# we obtain the matrix of the signal around the regions:
+m_creb1_whole <- signal2Matrix(pv_list_whole, merged_peaks_whole)
+# maybe set an extend and a width?
+plotEnrichedHeatmaps(m_creb1_whole)
+```
+
+Here comes up the question how you want to analyze the whole genome. Going off of the whole genome for the heatmaps altogether makes not so much sense, since then you cannot divide it up into logical groups or assign it back to the original genome. So it would make more sense to cluster gene after gene and then compare them to eachother.
+
+This was initially our goal but as we had neither enough processing power or time to let this all run for the whole genome so we selected one more chromosome based on this paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC387762/
+The chosen chromosome would be chromosome 22, since according to this paper CREB1 binds to many sites on this chromosome. Let's find out how it is for the other CREB family members.
+
+## Restricting all of the CREB family memeber peaks to chromosome 22
+
+```{r}
+# CREB1
+peaks_creb1_chr22 <- peaks_creb1[seqnames(peaks_creb1)=="chr22"]
+# CREB3
+peaks_creb3_chr22 <- peaks_creb3[seqnames(peaks_creb3)=="chr22"]
+# CREB3L1
+peaks_creb3l1_chr22 <- peaks_creb3l1[seqnames(peaks_creb3l1)=="chr22"]
+# CREB5
+peaks_creb5_chr22 <- peaks_creb5[seqnames(peaks_creb5)=="chr22"]
+```
+
+## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 22
+
+First we create an Overlap of the peaks of chromosome 22 of all CREB family members and an Upsetplot of the same regions.
+
+```{r}
+listofRegions_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22)
+regionOverlaps(listofRegions_22)
+regionUpset(listofRegions_22)
 ```
 
 ```{r}
