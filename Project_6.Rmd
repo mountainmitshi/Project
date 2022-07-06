@@ -7,6 +7,9 @@ output: html_document
 
 # Doing the previous things for the whole genome
 
+This was initially our goal but as we had neither enough processing power or time to let this all run for the whole genome we selected one more chromosome based on this paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC387762/
+The chosen chromosome would be chromosome 22, since according to this paper CREB1 binds to many sites on this chromosome.
+
 ```{r}
 
 ```
