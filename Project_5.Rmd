@@ -5,58 +5,7 @@ date: '2022-06-14'
 output: html_document
 ---
 
-# Adding the cofactors and one methylation to the analysis
-
-## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 1 AND the cofactors and methylation
-
-```{r}
-listofRegions_cf <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, crebbp=peaks_crebbp, jun=peaks_jun, ep300=peaks_ep300, hdac2=peaks_hdac2, h3k27ac=peaks_h3k27ac)
-regionOverlaps(listofRegions_cf)
-regionUpset(listofRegions_cf)
-```
-### Creating different regionOverlap plots and regionUpset plots to see it more clearly
-
-```{r}
-# CREBBP
-listofRegions_crebbp <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, crebbp=peaks_crebbp)
-regionOverlaps(listofRegions_crebbp)
-regionUpset(listofRegions_crebbp)
-```
-
-```{r}
-# JUN
-listofRegions_jun <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, jun=peaks_jun)
-regionOverlaps(listofRegions_jun)
-regionUpset(listofRegions_jun)
-```
-
-```{r}
-# EP300
-listofRegions_ep300 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, ep300=peaks_ep300)
-regionOverlaps(listofRegions_ep300)
-regionUpset(listofRegions_ep300)
-```
-```{r}
-# HDAC2
-listofRegions_hdac2 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, hdac2=peaks_hdac2)
-regionOverlaps(listofRegions_hdac2)
-regionUpset(listofRegions_hdac2)
-```
-```{r}
-# H3K27ac
-listofRegions_h3k27ac <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, h3k27ac=peaks_h3k27ac)
-regionOverlaps(listofRegions_h3k27ac)
-regionOverlaps(listofRegions_h3k27ac, cluster = length(listofRegions_h3k27ac))
-regionUpset(listofRegions_h3k27ac)
-regionUpset(listofRegions_h3k27ac, reference = peaks_creb1_chr1)
-```
-To analyze these we can set the reference to different CREB family members which might give us some different information.
-Figure out if we want to add clusters in the regionOverlaps.
-
-
-## Doing analysis according to clusters
-
-Let's look at how the different clusters interact with the cofactors and the methylation.
+# Adding the cofactors and one acetylation to the analysis
 
 ```{r}
 # get the regions on the cofactors and the methylation for just chromosome 1
@@ -71,6 +20,74 @@ peaks_hdac2_chr1 <- peaks_hdac2[seqnames(peaks_hdac2)=="chr1"]
 # H3K27ac
 peaks_h3k27ac_chr1 <- peaks_h3k27ac[seqnames(peaks_h3k27ac)=="chr1"]
 ```
+
+## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 1 AND the cofactors and acetylation
+
+We make a list of regions that includes the cofactors and the acetylation to it and use this list to do another regionOverlaps and regionUpset plot.
+
+```{r}
+
+listofRegions_cf <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, crebbp=peaks_crebbp, jun=peaks_jun, ep300=peaks_ep300, hdac2=peaks_hdac2, h3k27ac=peaks_h3k27ac)
+regionOverlaps(listofRegions_cf)
+regionUpset(listofRegions_cf)
+```
+What stands out in the RegionOverlaps plot is that the cofactors overlap strongly with one another and the overlaps of the cofactors with the CREB family members is in around the same dimension except for CREB5, which shows lower overlaps.
+CREBBP seems to have not very many overlapping regions with anything.
+
+The RegionUpset plot shows that the acetylations have by far the biggest intersection size and most intersections are also shown with its involvement. This acetylation seems to be very present.
+
+### Creating different regionOverlap plots and regionUpset plots to see it more clearly
+
+Following we are creating more specific plots by focusing on one cofactor or acetylation. We add our focus into the list of CREB family members and leave the others away.
+To analyze these we can set the reference to different CREB family members which might give us some different information.
+
+```{r}
+# CREBBP
+listofRegions_crebbp <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, crebbp=peaks_crebbp_chr1)
+regionOverlaps(listofRegions_crebbp)
+regionUpset(listofRegions_crebbp, reference = peaks_crebbp_chr1)
+```
+CREBBP seems not to have very many overlaps with any of the CREB family members on chromosome 1.
+
+```{r}
+# JUN
+listofRegions_jun <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, jun=peaks_jun_chr1)
+regionOverlaps(listofRegions_jun)
+regionUpset(listofRegions_jun, reference = peaks_jun_chr1)
+```
+JUN has most overlaps with CREB1 and CREB3L1.
+
+
+```{r}
+# EP300
+listofRegions_ep300 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, ep300=peaks_ep300_chr1)
+regionOverlaps(listofRegions_ep300)
+regionUpset(listofRegions_ep300, reference = peaks_ep300_chr1)
+```
+EP300 seems to have intersections with all CREB family members, most with CREB1, then CREB3L1, then CREB3 and even with CREB5.
+
+```{r}
+# HDAC2
+listofRegions_hdac2 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, hdac2=peaks_hdac2_chr1)
+regionOverlaps(listofRegions_hdac2)
+regionUpset(listofRegions_hdac2, reference = peaks_hdac2_chr1)
+```
+HDAC2 has a similar overlap pattern to EP300.
+
+```{r}
+# H3K27ac
+listofRegions_h3k27ac <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1, h3k27ac=peaks_h3k27ac_chr1)
+regionOverlaps(listofRegions_h3k27ac)
+regionUpset(listofRegions_h3k27ac, reference = peaks_h3k27ac_chr1)
+regionUpset(listofRegions_h3k27ac, reference = peaks_creb1_chr1)
+```
+
+H3K27ac seems to intersect most with CREB1, then CREB3L1, CREB3 and barely with CREB5.
+
+
+## Doing analysis according to clusters
+
+Let's look at how the different clusters interact with the cofactors and the methylation.
 
 ```{r}
 # create a list with all the peaks on chromosome 1

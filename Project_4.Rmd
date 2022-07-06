@@ -180,7 +180,10 @@ On the x-axis is the strength of enrichment and the color of the dot represents 
 Smaller sets need more enrichment in order to be significant than large sets. That's why we look at both the significance and the fold enrichment which indicates the magnitude of enrichment.
 Disclaimer: not everything makes sense because the same genes get reused in many biological processes, but we can learn something about what the clusters do.
 
-Analyze this:
+Analyze this and link it to the biological background:
+Biological processes:
+Molecular function:
+Cellular components:
 
 Now we only did this for cluster 6 compared to all clusters. We need to do more comparisons like this and figure out what cluster stands for what.
 
