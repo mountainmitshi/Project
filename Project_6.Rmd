@@ -14,6 +14,16 @@ listofRegions_whole <- list(creb1=peaks_creb1, creb3=peaks_creb3, creb3l1=peaks_
 regionOverlaps(listofRegions_whole)
 regionUpset(listofRegions_whole)
 ```
+## Comparison to chromosome 1
+
+In order to be able to compare it better to what only chromosome 1 looked like, we are adding the chromosome 1 UpsetPlot here as well.
+
+```{r}
+listofRegions <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1)
+regionOverlaps(listofRegions)
+regionUpset(listofRegions)
+```
+Compare them:
 
 ## Restricting to CREB1 sites
 
