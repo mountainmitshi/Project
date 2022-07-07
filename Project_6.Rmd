@@ -1,6 +1,6 @@
 ---
 title: "Project_6"
-author: "Sarah Eiben"
+author: "Sarah Eiben, Michelle Baumgartner, Deni Hodzic"
 date: '2022-06-16'
 output: html_document
 ---
