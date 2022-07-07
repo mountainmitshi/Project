@@ -1,13 +1,13 @@
 ---
 title: "Project_4"
-author: "Sarah Eiben, Michelle Baumgartner, Deni Hodzic"
+author: "Sarah Eiben"
 date: '2022-06-14'
 output: html_document
 ---
 
 # Clustering of the signals and enrichment analysis
 
-Our second approach to compare the different family members with each other is to cluster the signals and do an enrichment analysis with the clusters. After plotting the signals in a combined heatmap, the signals will be clustered and analyzed in an enrichment analysis.
+Our second approach to compare the different family members with eachother is to cluster the signals and do an enrichment analysis with the clusters. After plotting the signals in a combined heatmap, the signals will be clustered and analyzed in an enrichment analysis.
 
 Help for this in the code from lecture 9.
 
@@ -29,6 +29,7 @@ suppressPackageStartupMessages({
   library(DMRcate)
 })
 ```
+
 ## Plotting the signals
 
 As regions we are going to be using the peaks from the different CREB family members that we downloaded in Project_2 and the tracks are the corresponding signal p-values.
@@ -139,38 +140,38 @@ More analyis here?
 Now we want to figure out what the regions are. For example what are the regions in cluster 1, are they associated with or close to genes that have a different kind of function than the regions in cluster 5?
 Typically you add more signals in order to find more patterns of correlation. Are they bound by other factors?
 
-Find what's enriched in one cluster with respect to the others:
+Find what's enriched in one cluster with respect to the others (first we use cluster 1):
 
 ```{r}
 # we first split the regions by cluster:
 split_regions <- split(merged_peaks, cl)
 # Important: when a job is submitted to GREAT a set of regions, a GRanges object, needs to be submitted BUT there also needs to be some sort of background added to the picture. The elements in a list of regions are always compared to other elements. So we are comparing the regions in cluster 6 with respect to all our other regions.
 # sending the data to the server
-job <- submitGreatJob(split_regions[["6"]], merged_peaks, species="hg38")
+job_1 <- submitGreatJob(split_regions[["1"]], merged_peaks, species="hg38")
 #Human GRCh38/hg38 is the genome we used
-job
+job_1
 # we fetch the data back
-res <- getEnrichmentTables(job)
-names(res)
+res_1 <- getEnrichmentTables(job_1)
+names(res_1)
 ```
 Molecular function is about being enzymes, signalling proteins, biological process is what they are involved in and cellular component is where they work. This gives us an overview.
 
-## Plotting the top Biological Processes, molecular functions and cellular components
+## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 1
 
 ```{r, fig.width=9, fig.height=6}
 # looking at the biological processes
-bp <- res$`GO Biological Process`
+bp <- res_1$`GO Biological Process`
 head(bp)
 # reorder it from most to least statistically significant before being alphabetically ordered.
 ggplot(head(bp,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 
 # looking at the molecular function
-mf <- res$`GO Molecular Function`
+mf <- res_1$`GO Molecular Function`
 head(mf)
 ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 
 # looking at cellular components
-cc <- res$`GO Cellular Component`
+cc <- res_1$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
 We get different genotology terms and it is telling us how many regions in our background are associated with this term and how many regions in our foreground, so the genes of interest are associated with this.
@@ -185,7 +186,72 @@ Biological processes:
 Molecular function:
 Cellular components:
 
-Now we only did this for cluster 6 compared to all clusters. We need to do more comparisons like this and figure out what cluster stands for what.
+Now we only did this for cluster 3 compared to all clusters. We need to do more comparisons like this and figure out what cluster stands for what.
+
+### Do another Cluster - Cluster 9
+
+Now we do the same analysis for cluster 9.
+
+```{r}
+job_9 <- submitGreatJob(split_regions[["9"]], merged_peaks, species="hg38")
+#Human GRCh38/hg38 is the genome we used
+job_9
+# we fetch the data back
+res_9 <- getEnrichmentTables(job_9)
+names(res_9)
+```
+## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 9
+
+```{r, fig.width=9, fig.height=6}
+# looking at the biological processes
+bp <- res_9$`GO Biological Process`
+head(bp)
+# reorder it from most to least statistically significant before being alphabetically ordered.
+ggplot(head(bp,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at the molecular function
+mf <- res_9$`GO Molecular Function`
+head(mf)
+ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at cellular components
+cc <- res_9$`GO Cellular Component`
+ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+```
+
+### Do another Cluster - Cluster 10
+
+Now we do the same analysis for cluster 10.
+
+```{r}
+job_10 <- submitGreatJob(split_regions[["10"]], merged_peaks, species="hg38")
+#Human GRCh38/hg38 is the genome we used
+job_10
+# we fetch the data back
+res_10 <- getEnrichmentTables(job_10)
+names(res_10)
+```
+
+## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 10
+
+```{r, fig.width=9, fig.height=6}
+# looking at the biological processes
+bp <- res_10$`GO Biological Process`
+head(bp)
+# reorder it from most to least statistically significant before being alphabetically ordered.
+ggplot(head(bp,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at the molecular function
+mf <- res_10$`GO Molecular Function`
+head(mf)
+ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at cellular components
+cc <- res_10$`GO Cellular Component`
+ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+```
+
+--> INTERPRET ALL OF THESE!!
 
 ```{r}
 sessionInfo()
