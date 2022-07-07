@@ -1,0 +1,27 @@
+---
+title: "Project_8"
+author: "Sarah Eiben"
+date: '2022-07-07'
+output: html_document
+---
+
+# Methods
+
+As previously mentioned, we used data provided from ENCODE from the K562 cells, as this data was already provided for all the CREB family members and cofactors that we needed.
+
+Furthermore, we used most importantly the epiwraps package in Biocmanager and other packages and functions that were introduced to us in the lecture.
+
+Inflicted through our rather slow computers and limited processing abilities, we were forced to cut back on some of our ideas.
+
+Following is how we approached to find answers to our questions.
+After downloading and importing the data from ENCODE into R, we proceeded to analyze the CREB family member peaks for chromosome 1 with the help of varying regionOverlaps and regionUpset plots. In a next step, we plotted heatmaps of the chromosome 1 signals. Clustering helped get a better overview and through enrichment analysis we tried to connect peak signals to functions.
+
+Then we added the peak signals of cofactors, to get an idea of how their peaks coincide with the CREB family member peaks. Again regionOverlaps and regionUpset plots were used in several variations with different foci to figure out how the factors interplay.
+
+Adding one specific acetylation to the analysis, we proceeded to look at how this interacts with the CREB family members and the cofactors.
+
+The acetylation and the cofactor interactions were then also analyzed using clusters to see what factors could potentially be connected to eachother.
+
+The plan was to then proceed with repeating all that we had done for the whole genome. This was partially done, but in our opinion it would result in most information to seperate the chromosomes and do the whole process for each chromosome to be able to assign the functions and results to corresponding places in the genome. As we realized this rather late in the process, we restricted ourselves to repeat the analysis for chromosome 22, as we found in literature that CREB1 highly interacts with this chromosome. We tried to figure out if other CREB family members, cofactors and the acetylation equally interact with chromosome 2 and then compare it to what we saw in chromosome 1.
+
+This process was chosen according to our (limited) knowledge of the field and our knowledge was also used to analyze and compare the results.
