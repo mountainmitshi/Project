@@ -64,7 +64,7 @@ regionUpset(listofRegions_whole, reference = peaks_creb5)
 ```
 # How do these plots make sense?
 
-Interpret them!
+Looking at the plots above we can find the most interactions between CREB1 and CREB3l1, followed by CREB3 and CREB3l1, the least interactions are found with CREB5, which mainly interacts with CREB3. 
 
 # Clustering of the signals and enrichment analysis
 
@@ -115,3 +115,4 @@ regionUpset(listofRegions_22)
 sessionInfo()
 ```
 
+Michelle
