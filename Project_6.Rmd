@@ -111,6 +111,126 @@ regionOverlaps(listofRegions_22)
 regionUpset(listofRegions_22)
 ```
 
+# Restricting to CREB1
+
+```{r}
+regionUpset(listofRegions_22, reference = peaks_creb1_chr22)
+```
+
+## Restricting to CREB3 sites
+
+```{r}
+regionUpset(listofRegions_22, reference = peaks_creb3_chr22)
+```
+
+## Restricting to CREB3L1 sites
+
+```{r}
+regionUpset(listofRegions_22, reference = peaks_creb3l1_chr22)
+```
+
+## Restricting to CREB5 sites
+
+```{r}
+regionUpset(listofRegions_22, reference = peaks_creb5_chr22)
+```
+## Explain how these plots make sense? How do they compare to chr1?
+
+# Adding the cofactors and one acetylation to the analysis
+
+```{r}
+# get the regions on the cofactors and the methylation for just chromosome 22
+# CREBBP
+peaks_crebbp_chr22 <- peaks_crebbp[seqnames(peaks_crebbp)=="chr22"]
+# CREB3
+peaks_jun_chr22 <- peaks_jun[seqnames(peaks_jun)=="chr22"]
+# CREB3L1
+peaks_ep300_chr22 <- peaks_ep300[seqnames(peaks_ep300)=="chr22"]
+# CREB5
+peaks_hdac2_chr22 <- peaks_hdac2[seqnames(peaks_hdac2)=="chr22"]
+# H3K27ac
+peaks_h3k27ac_chr22 <- peaks_h3k27ac[seqnames(peaks_h3k27ac)=="chr22"]
+```
+
+## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 22 AND the cofactors and acetylation
+
+We make a list of regions that includes the cofactors and the acetylation to it and use this list to do another regionOverlaps and regionUpset plot.
+
+```{r}
+listofRegions_cf_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22, crebbp=peaks_crebbp, jun=peaks_jun, ep300=peaks_ep300, hdac2=peaks_hdac2, h3k27ac=peaks_h3k27ac)
+regionOverlaps(listofRegions_cf_22)
+regionUpset(listofRegions_cf_22)
+```
+
+### Creating different regionOverlap plots and regionUpset plots to see it more clearly
+
+Following we are creating more specific plots by focusing on one cofactor or acetylation. We add our focus into the list of CREB family members and leave the others away.
+To analyze these we can set the reference to different CREB family members which might give us some different information.
+
+```{r}
+# CREBBP
+listofRegions_crebbp_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22, crebbp=peaks_crebbp_chr22)
+regionOverlaps(listofRegions_crebbp_22)
+regionUpset(listofRegions_crebbp_22, reference = peaks_crebbp_chr22)
+```
+
+CREBBP seems not to have very many overlaps with any of the CREB family members on chromosome 22.
+
+```{r}
+# JUN
+listofRegions_jun_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22, jun=peaks_jun_chr22)
+regionOverlaps(listofRegions_jun_22)
+regionUpset(listofRegions_jun_22, reference = peaks_jun_chr22)
+```
+JUN seems not to have very many overlaps with any of the CREB family members on chromosome 22.
+
+```{r}
+# EP300
+listofRegions_ep300_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22, ep300=peaks_ep300_chr22)
+regionOverlaps(listofRegions_ep300_22)
+regionUpset(listofRegions_ep300_22, reference = peaks_ep300_chr22)
+```
+EP300 also seems to have little intersections with the CREB family members but most with CREB1. 
+
+```{r}
+# HDAC2
+listofRegions_hdac2_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22, hdac2=peaks_hdac2_chr22)
+regionOverlaps(listofRegions_hdac2_22)
+regionUpset(listofRegions_hdac2_22, reference = peaks_hdac2_chr22)
+```
+
+HDAC2 seems to have most intersections with the CREB family members especially CREB1 followed by CREB3l1. 
+
+```{r}
+# H3K27ac
+listofRegions_h3k27ac_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, creb3l1=peaks_creb3l1_chr22, creb5=peaks_creb5_chr22, h3k27ac=peaks_h3k27ac_chr22)
+regionOverlaps(listofRegions_h3k27ac_22)
+regionUpset(listofRegions_h3k27ac_22, reference = peaks_h3k27ac_chr22)
+regionUpset(listofRegions_h3k27ac_22, reference = peaks_creb1_chr22)
+```
+H3K27ac seems to intersect most with CREB1, then CREB3L1, and barely with CREB5.
+
+--> NOT SURE ABOUT THE INTERSECTION OF H3K27AC AND CREB3!!!
+
+## Doing analysis according to clusters
+
+Let's look at how the different clusters interact with the cofactors and the methylation.
+
+--> STILL NEEDS TO BE ADJUSTED NOT WORKING YET
+
+```{r}
+# create a list with all the peaks on chromosome 22
+peak_list_cf_22 <- GRangesList("Peaks CREB1"=peaks_creb1_chr22, "Peaks CREB3"=peaks_creb3_chr22, "Peaks CREB3L1"=peaks_creb3l1_chr22, "Peaks CREB5"=peaks_creb5_chr22, "Peaks CREBBP"=peaks_crebbp_chr22, "Peaks JUN"=peaks_jun_chr22, "Peaks EP300"=peaks_ep300_chr22, "Peaks HDAC2"=peaks_hdac2_chr22, "Peaks H3K27ac"=peaks_h3k27ac_chr22, compress=TRUE)
+# merge the peaks together to create one list of non-overlapping regions
+merged_peaks_cf_22 <- reduce(unlist(peak_list_cf_22))
+# make a list of the signal p-values
+pv_list_cf <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw", CREBBP="signal_pv_cofactors/signal_pv_crebbp.bw", JUN="signal_pv_cofactors/signal_pv_jun.bw", EP300="signal_pv_cofactors/signal_pv_ep300.bw", HDAC2="signal_pv_cofactors/signal_pv_hdac2.bw", H3K27ac="H3K27ac/h3k27ac_signal_pv.bw")
+# we obtain the matrix of the signal around the regions:
+m_creb1_cf_22 <- signal2Matrix(pv_list_cf, merged_peaks_cf_22)
+# maybe set an extend and a width?
+plotEnrichedHeatmaps(m_creb1_cf_22, row_title="Clustered analysis")
+```
+
 ```{r}
 sessionInfo()
 ```
