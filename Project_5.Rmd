@@ -1,6 +1,6 @@
 ---
 title: "Project_5"
-author: "Sarah Eiben, Michelle Baumgartner, Deni Hodzic"
+author: "Sarah Eiben"
 date: '2022-06-14'
 output: html_document
 ---
@@ -80,9 +80,13 @@ listofRegions_h3k27ac <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, cr
 regionOverlaps(listofRegions_h3k27ac)
 regionUpset(listofRegions_h3k27ac, reference = peaks_h3k27ac_chr1)
 regionUpset(listofRegions_h3k27ac, reference = peaks_creb1_chr1)
+# comparing H3K27ac to the cofactors
+listofRegions_h3k27ac_2 <- list(crebbp=peaks_crebbp_chr1, jun=peaks_jun_chr1, ep300=peaks_ep300_chr1, hdac2=peaks_hdac2_chr1, h3k27ac=peaks_h3k27ac_chr1)
+regionOverlaps(listofRegions_h3k27ac_2)
+regionUpset(listofRegions_h3k27ac_2, reference = peaks_h3k27ac_chr1)
 ```
 
-H3K27ac seems to intersect most with CREB1, then CREB3L1, CREB3 and barely with CREB5.
+H3K27ac seems to intersect most with CREB1, then CREB3L1, CREB3 and barely with CREB5. From the cofactors it has noticeable intersections with hdac2 and ep300.
 
 
 ## Doing analysis according to clusters
@@ -111,40 +115,34 @@ Thus we try to correct for this by trying two approaches.
 The first approach is to plot two groups of experiments seperately, so that they have their own color scale and then join them afterwarts.
 
 ```{r}
-plotEnrichedHeatmaps(m_creb1_cf[1:6]) + plotEnrichedHeatmaps(m_creb1_cf[7:9])
+plotEnrichedHeatmaps(m_creb1_cf[1:6], scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1") + plotEnrichedHeatmaps(m_creb1_cf[7:9], scale_title="density\nothers", row_title="Approach 1")
 ```
 
 ### Approach 2: Re-normalization
 
 The second approach is to re-normalize the signals. This can be done with the function renormalizeBorders (2a).
-An even better way to do this is to first estimate the background noise based on the whole genome and then use those to normalize our matrices (2b). Let's try both and compare.
 
 ```{r}
 # Approach 2a
-plotEnrichedHeatmaps(renormalizeBorders(m_creb1_cf), row_title = "Approach 2a")
-#Approach 2b
-nf <- bwNormFactors(pv_list_cf)
-m_crebl_cf_normalized <- rescaleSignalMatrices(m_creb1_cf, nf)
-plotEnrichedHeatmaps(m_crebl_cf_normalized, row_title = "Approach 2b0")
+plotEnrichedHeatmaps(renormalizeBorders(m_creb1_cf), row_title = "Approach 2")
 ```
 
-Gives me an error but also 2 heatmaps???
-
+Approach 1 shows more clearly what we want to see, so we continue with that approach.
 
 ### Cluster
 
 ```{r}
-cl <- clusterSignalMatrices(m_creb1_cf, k=5)
+cl_2 <- clusterSignalMatrices(m_creb1_cf, k=5)
 # 10 clusters explain 96% of the variance
 # 5 clusters explain 91% of the variance
-merged_peaks_cf$cluster <- cl
+merged_peaks_cf$cluster <- cl_2
 ```
 ```{r}
 set.seed(124)
-plotEnrichedHeatmaps(m_creb1_cf, row_split=cl)
+plotEnrichedHeatmaps(m_creb1_cf[1:6], row_split = cl_2, scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf[7:9], row_split = cl_2, scale_title="density\nothers", row_title="Approach 1 with clusters")
 ```
 
-Adjust the normalization.
+Interpret this.
 
 ```{r}
 sessionInfo()
