@@ -161,6 +161,11 @@ listofRegions_cf_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, cr
 regionOverlaps(listofRegions_cf_22)
 regionUpset(listofRegions_cf_22)
 ```
+What stands out in this RegionOverlaps plot is that the cofactor hdac2 overlaps strongly with the acetylation h3k27ac. 
+
+CREB5 seems to have the least overlaps.
+
+The RegionUpset plot shows that the acetylations have by far the biggest intersection size and most intersections are also shown with its involvement. This acetylation seems to be very present.
 
 ### Creating different regionOverlap plots and regionUpset plots to see it more clearly
 
@@ -208,9 +213,8 @@ regionOverlaps(listofRegions_h3k27ac_22)
 regionUpset(listofRegions_h3k27ac_22, reference = peaks_h3k27ac_chr22)
 regionUpset(listofRegions_h3k27ac_22, reference = peaks_creb1_chr22)
 ```
-H3K27ac seems to intersect most with CREB1, then CREB3L1, and barely with CREB5.
+H3K27ac seems to intersect most with CREB3l1 and CREB1 then CREB3, and barely with CREB5.
 
---> NOT SURE ABOUT THE INTERSECTION OF H3K27AC AND CREB3!!!
 
 ## Doing analysis according to clusters
 
@@ -230,8 +234,46 @@ m_creb1_cf_22 <- signal2Matrix(pv_list_cf, merged_peaks_cf_22)
 # maybe set an extend and a width?
 plotEnrichedHeatmaps(m_creb1_cf_22, row_title="Clustered analysis")
 ```
+-->> ADD IN ANALAYSIS OF THE HEATMAPS, WHAT DO WE SEE HERE? 
+
+### Approach 1: Plot groups of experiments and combine
+
+The first approach is to plot two groups of experiments seperately, so that they have their own color scale and then join them afterwarts.
+
+```{r}
+plotEnrichedHeatmaps(m_creb1_cf_22[1:6], scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1") + plotEnrichedHeatmaps(m_creb1_cf_22[7:9], scale_title="density\nothers", row_title="Approach 1")
+```
+
+### Approach 2: Re-normalization
+
+The second approach is to re-normalize the signals. This can be done with the function renormalizeBorders (2a).
+
+```{r}
+# Approach 2a
+plotEnrichedHeatmaps(renormalizeBorders(m_creb1_cf_22), row_title = "Approach 2")
+```
+
+Approach 1 shows more clearly what we want to see, so we continue with that approach.
+
+### Cluster
+
+```{r}
+cl_2_22 <- clusterSignalMatrices(m_creb1_cf_22, k=5)
+# 10 clusters explain 96% of the variance
+# 5 clusters explain 91% of the variance
+merged_peaks_cf_22$cluster <- cl_2_22
+```
+```{r}
+set.seed(124)
+plotEnrichedHeatmaps(m_creb1_cf_22[1:6], row_split = cl_2_22, scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf_22[7:9], row_split = cl_2_22, scale_title="density\nothers", row_title="Approach 1 with clusters")
+```
+
+Interpret this.
+
+-->> COULD'T RUN THE ABOVE CHUNKS AS I COULDNT CREATE m_creb1_cf_22
 
 ```{r}
 sessionInfo()
 ```
+
 
