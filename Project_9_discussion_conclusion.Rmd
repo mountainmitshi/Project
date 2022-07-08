@@ -15,4 +15,8 @@ Much less signal on chromosome 22 than chromosome 1 because of the chromosome si
 
 Mention that we would have to more deeply analyze cofactors individually to see some results that make more sense.
 
-Add an evaluation of who did what.
+For your information and in order to keep things fair, we are adding a list of which group member worked on which part of the project.
+
+Deni: helped with the introduction
+Michelle: Great part of the analysis in the results, introduction, discussion and conclusion.
+Sarah: Code, big part of the results, analysis, references
