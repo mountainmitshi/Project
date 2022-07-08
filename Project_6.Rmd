@@ -140,6 +140,8 @@ In comparison to chromosome 1 there are a lot fewer intersections of the CREB fa
 
 The patterns of the restricted plots are also very similar with the exception of CREB5 which has more intersections with CREB3 and CREB1 than with CREB3L1 but the numbers are very close.
 
+Here we tried to add clustering and enrichment analysis of these signals but R didn't cooperate. We got an error that some of the files didn't exist, even though we created the files in the same chunk, just like the other times before. We didn't find a solution for this problem, so we let it be.
+
 # Adding the cofactors and one acetylation to the analysis
 
 ```{r}
