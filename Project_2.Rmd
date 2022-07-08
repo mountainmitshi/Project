@@ -58,7 +58,7 @@ download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF3
 
 ## Downloading cofactor peaks
 Downloading the peaks of the following cofactors: CREBBP, JUN, EP300 and HDAC2 into a folder named peaks_cofactors.
-Maybe we won't need these - then we will just delete this chunk again.
+Maybe we won't need these - we download them just to be sure.
 
 ```{r}
 dir.create("peaks_cofactors")
