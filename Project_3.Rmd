@@ -43,31 +43,9 @@ peaks_creb3l1_chr1 <- peaks_creb3l1[seqnames(peaks_creb3l1)=="chr1"]
 peaks_creb5_chr1 <- peaks_creb5[seqnames(peaks_creb5)=="chr1"]
 ```
 
-## Getting an idea of the peaks in chromosome 1
-
-Should we do this??
-
-Using just the strongest peaks.
-
-```{r}
-#look at how many peaks there are
-length(peaks_creb1_chr1)
-head(peaks_creb1_chr1)
-#My peaks for some reason doesn't have the qValue?
-strong_peaks_creb1 <- peaks_creb1_chr1[peaks_creb1_chr1$score>median(peaks_creb1_chr1$score)]
-#extend shows you a little more area around the peak, the resolution is 20, specify the regions you want to analyse
-peakSignals_creb1_chr1 <- signal2Matrix("signal_pv_creb/signal_pv_creb1", regions=strong_peaks_creb1, extend=2000, w=20)
-class(peakSignals_creb1_chr1[[1]])
-#the data itself is a big matrix, let's look at it
-peakSignals_creb1_chr1[[1]][1:5, 1:5]
-plotEnrichedHeatmaps(peakSignals_creb1_chr1, raster_by_magick=FALSE)
-```
-
 ## Creating a regionOverlap and a regionUpset for all CREB family members for chromosome 1
 
 First we create an Overlap of the peaks of chromosome 1 of all CREB family members and an Upsetplot of the same regions.
-
-Look at lecture 5 code for this!
 
 ```{r}
 listofRegions <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1)
@@ -99,6 +77,7 @@ Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
 regionUpset(listofRegions, reference = peaks_creb3l1_chr1)
 ```
 ## Restricting to CREB5 sites
+
 Here we tried out how the upsetplot changes when we restrict it to CREB5.
 
 ```{r}
