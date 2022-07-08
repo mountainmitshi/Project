@@ -12,3 +12,5 @@ Mention that we compared what we found out about CREB1 matches what has previous
 Much less signal on chromosome 22 than chromosome 1 because of the chromosome size.
 
 # Conclusion
+
+Mention that we would have to more deeply analyze cofactors individually to see some results that make more sense.
