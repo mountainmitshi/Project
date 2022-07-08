@@ -7,16 +7,34 @@ output: html_document
 
 # Discussion
 
-Mention that we compared what we found out about CREB1 matches what has previously been found out about CREB1, so our results for the other CREB family members could be more valid.
+The goal of our project was to figure out more about the function of variouse CREB family members, while we managed to get results to CREB1, CREB3 and CREB3L1, we struggled finding any relevant points to CREB5. 
 
-Much less signal on chromosome 22 than chromosome 1 because of the chromosome size.
+After analyzing our enrichment analysis of the CREB family members we compared our results with already existing knowledge on variouse CREB family members. To our surprise the biological activity, molecular function as well as cellular components had a certain similarity with existing knowlege on these family members (www.gencards.org). 
+
+According to gencards.org CREB1 binds as a homodimer to the cAMP-responsive element. It is plays a role in synchronization of circadian rhythm and the differentiation of adipose cells and can mainly be found in the nucleus. 
+In our analysis CREB1 was mainly found in Cluster 7 together with CREB3L1. We figured out that CREB1 is an important player with protein homodimerization activity in cell cycle and gylcosol compound metabolic processes. Furthermore our analysis helped us to locate CREB1 mainly in the nucleus and organelles. Whereas one must mention here that these functions and localization was found in strong correlation with CREB1 and CREB3L1 as we analyzed this as one cluster. 
+
+CREB3L1 was found to have high activity in two of our clusters, cluster 9 and cluster 7. Also here we compared our found functions through analyisis with already existing knowlege from gencards. CREB3L1 is usually found in the endoplamatic reticlulum and upon stress may translocate to the nucleus. It is an important player in bone formation and secretion of bone matrix proteins. 
+In our analysis we found that cluster 9 may play an important role in protein complex biogeneis and assemly, protein targeting and establishment of protein localization to organelles. When thinking of this in context with bone formation there seems to be some correlation. Furthermore we found out that it plays an important role in cofactor binding, peptide bindinge and amide binding and is mainly found in organelles and extracellular regions. The only part here that does not make sense of our analysis is that it is largely found in extracellular regions, as on gencards this does not seem to be the case at all. 
+
+Lastly we still want to compare our results from CREB3 with already existing knowledge. CREB3 is found in most parts of the cell exept the organelles and CREB3L1 seems to have some paralogue functions to CREB3. As part of the cAMP pathway CREB3 is an important player in regulation of cell proliferation, migration and differentiation, tumor suppression and inflammatory gene expression.
+According to our analysis CREB3 is involved in response to stimulus, phophorous metabolic processes and positive regulation of cell diferentiation. Is is involved in small molecule binding, identical protein binding and transcription factor activity and binding. The main cellular compartments where we can find CREB3 are cell parts, cytoplams, the nuclear lumen and membrane parts. 
+
+Also here we can find some correlation of the activitiy and location of CREB3. 
+
+All these analysis were only done on chromosome 1 due to lack of computational power and time so they are not valid over the whole genome. We did conduct some analysis on chromosme 22 aswell, yet received much less signal which may be due to the much smaller chromosome size. 
 
 # Conclusion
 
-Mention that we would have to more deeply analyze cofactors individually to see some results that make more sense.
+This project gave us insight into the functions of variouse CREB members yet more analysis would be required to make definite statements. What is rather satisfying is to see that our results do correlate with the current state of knowledge to a great extent. 
 
-For your information and in order to keep things fair, we are adding a list of which group member worked on which part of the project.
+Due to lack of understanding and time we were not quite sure how to analyze the cofactors correctly this would also be sensible to look at closer in future to see what role the cofactors play and with which CREB family members they seem to associate. 
 
-Deni: helped with the introduction
-Michelle: Great part of the analysis in the results, introduction, discussion and conclusion.
-Sarah: Code, big part of the results, analysis, references
+# Group evaluation
+
+Due to lack of communication and struggles finding times to work on the group project together the distribution of workload in our group was realtive uneven, due to this we added a short summary for which parts of the project who was mainly responsible.
+
+- Sarah Eiben: Coding, Evaluation, References, Formating
+- Michelle Baumgartner: Evaluation, Results, Introduction
+- Deni Hodzic: Introduction
+Add an evaluation of who did what.
