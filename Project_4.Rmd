@@ -186,12 +186,11 @@ On the x-axis is the strength of enrichment and the color of the dot represents 
 Smaller sets need more enrichment in order to be significant than large sets. That's why we look at both the significance and the fold enrichment which indicates the magnitude of enrichment.
 Disclaimer: not everything makes sense because the same genes get reused in many biological processes, but we can learn something about what the clusters do.
 
-Analyze this and link it to the biological background:
-Biological processes:
-Molecular function:
-Cellular components:
+Here we analyzed cluster 2 which involves mainly CREB3, so looking at our plots we can get an idea of how CREB3 is involved in following processes in the cell. 
+- Biological processes: We can see a relative high probability that cluster 2 is involved in response to stimulus, phosphorouse metabolic processes and positive regulation of cell differentiation. 
+- Molecular function: Cluster 2 seems to be relatively highly involved in small molecule binding, identical protein binding, transcription factor activity and transcription factor binding as well as protein binding. 
+- Cellular components: Cluster 2 can mainly be found in the cell, cell parts, cytoplasm, nuclear lumen and parts of the membrane. 
 
-Now we only did this for cluster 2 compared to all clusters. We need to do more comparisons like this and figure out what cluster stands for what.
 
 ### Do another Cluster - Cluster 9
 
@@ -223,6 +222,12 @@ ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), siz
 cc <- res_9$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
+
+Cluster 9 mainly involves CREB3 and CREB3L1 so looking at the plots we can see how these are involved in following functions.
+
+- Biological processes: Cluster 9 seems to be highly involved in protein complex biogenesis, protein complex assebly as well as protein targeting and establishment of protein localization to organelle. 
+- Molecular function: Looking at the Enrichement plot we can see that cluster 9 has molecular functions in active transmembrane transporter activity, cofactor binding, peptide binding as well as amide binding. 
+- Cellular components: Cluster 9 can mainly be found in Organells, extracellular regions and parts of extracellular regions. 
 
 ### Do another Cluster - Cluster 7
 
@@ -256,7 +261,14 @@ cc <- res_7$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
 
---> INTERPRET ALL OF THESE!!
+Cluster 7 mainly involves CREB3L and CREB1 as we figured out with our colored enriched Heatmaps so the following functions may be tightly correlated with CREB3L and CREB1. 
+
+- Biological processes: Cluster 7 seems to play a role in cell cylce and glycosal compound metabolic process. 
+- Molecular function: Protein homodimerization activity and protein dimerization activity may be regulated by cluster 7. 
+- Cellular components: CREB3L1 and CREB1 are mainly found in organelles, nucleus, intracellular membrane bound organelles and into intracellular organelles. 
+
+
+All the results above are to be enjoyed with caution and will be further evaluated and compared with existing knowlege about the different CREB family members in our results and interpretation section. 
 
 ```{r}
 sessionInfo()
