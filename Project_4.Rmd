@@ -92,18 +92,18 @@ plotEnrichedHeatmaps(m_creb1, row_split=cl)
 ```
 Interpretation:
 
-Cluster 1: Represented in all CREB family members except for CREB5.
+Cluster 1: Strongly represented in CREB1 and CREB3L1.
 Cluster 2: Weak representation in all but CREB3.
-Cluster 3: A cluster of few regions strong in CREB1 and CREB3L1.
-Cluster 4: Medium representation in CREB1, CREB3 and CREB3L1 and barely any representation in CREB5.
-Cluster 5: Strong in CREB3 and one of the few that is also represented quite strongly in CREB5.
+Cluster 3: Medium representation in all but CREB5.
+Cluster 4: Strong in CREB3 and one of the few that is also represented quite strongly in CREB5 (still pretty weak).
+Cluster 5: Strong in CREB1, all the others weak or barely any signal.
 Cluster 6: Strong in CREB1 and CREB3L1.
-Cluster 7: Similar to Cluster 6.
-Cluster 8: Seems to be something especially strongly represented by CREB1.
-Cluster 9: A cluster of few regions remarkably strong and broad peaked in CREB3.
-Cluster 10: Similar to clusters 6 and 7 but broader and stronger peaks.
+Cluster 7: Similar to Cluster 6, a little stronger in CREB3.
+Cluster 8: Strong representation in CREB3 and weak in CREB1.
+Cluster 9: Very strong and broad with few regions in CREB3.
+Cluster 10: Similar to 6 and 7 although a bit stronger.
 
-So overall CREB1 is strongly present 7/10 times, CREB3 5/10 times, CREB3L1 6/10 times and CREB5 has a medium strong presence 2/10 times.
+So overall CREB1 is strongly present 7/10 times, CREB3 5/10 times, CREB3L1 6/10 times and CREB5 has a medium strong to weak presence 2/10 times.
 
 The curves at the top is the average signal across all the regions but with clusters we have multiple lines. But we cannot tell which one is which.
 So we set colors.
@@ -115,7 +115,10 @@ So we set colors.
 mycolors <- c("1"="yellow", "2"="orange", "3"="red", "4"="pink", "5"="purple", "6"="blue", "7"="green", "8"="brown", "9"="gray", "10"="black")
 plotEnrichedHeatmaps(m_creb1, row_split=cl, mean_color=mycolors, trim=c(0.95))
 ```
-Bring the curves into the interpretation!
+
+Now from the curves you can see that CREB1 stands out in cluster 7 and 10, CREB3 in cluster 2, 4 and 9, CREB3L1 in cluster 7 and 10 and CREB5 in cluster 2.
+
+Generally said, CREB1 and CREB3L1 have rather narrow peaks and CREB3 tends to be more broad. CREB5 is not very present.
 
 ## Plotting just the averages
 
@@ -134,11 +137,12 @@ Clustering is dangerous because you might change around factors until you like t
 
 From this plot we can generally tell once more that CREB5 is not very strongly involved in any of these peaks. All the other family members have some clusters that they are the strongest representative which means they might be strongly involved in whatever these processes represent.
 
-More analyis here?
+From these curves and the ones above the heatmap, we decided to further analyse 3 of these 10 clusters - Cluster 2, Cluster 7 and Cluster 9.
+Even though cluster 10 also has strong signals, we decided against further analysis because it looks similar to Cluster 7.
 
 # Enrichment analysis
 
-Now we want to figure out what the regions are. For example what are the regions in cluster 1, are they associated with or close to genes that have a different kind of function than the regions in cluster 5?
+Now we want to figure out what the regions are. For example what are the regions in cluster 2, are they associated with or close to genes that have a different kind of function than the regions in cluster 7?
 Typically you add more signals in order to find more patterns of correlation. Are they bound by other factors?
 
 Find what's enriched in one cluster with respect to the others (first we use cluster 2):
