@@ -26,6 +26,9 @@ In our Group project we aim to find the different binding domains of CREB1, CREB
 
 Eventually, all the data necessary for our group project was easily obtainable using the ENCODE-project.
 
+### Disclaimer
+The communication between us 3 was rather difficult. It is in no way an excuse for the quality of the project but we would like to mention it because it lead to this version of the project that we are handing in, which could in many ways be improved and is lacking in some areas.
+
 ```{r}
 sessionInfo()
 ```
