@@ -34,7 +34,8 @@ Due to lack of understanding and time we were not quite sure how to analyze the 
 
 Due to lack of communication and struggles finding times to work on the group project together the distribution of workload in our group was realtive uneven, due to this we added a short summary for which parts of the project who was mainly responsible.
 
-- Sarah Eiben: Coding, Evaluation, References, Formating
-- Michelle Baumgartner: Evaluation, Results, Introduction
+- Sarah Eiben: Coding, Evaluation, References, Methods, Formating
+- Michelle Baumgartner: Evaluation, Discussion, Conclusion, Introduction
 - Deni Hodzic: Introduction
-Add an evaluation of who did what.
+
+
