@@ -10,9 +10,9 @@ output: html_document
 Following we list the references we used.
 
 - Euskirchen, Ghia et al. “CREB binds to multiple loci on human chromosome 22.” Molecular and cellular biology vol. 24,9 (2004): 3804-14. doi:10.1128/MCB.24.9.3804-3814.2004
-- https://en.wikipedia.org/wiki/CREB
+- “CREB.” Wikipedia, Wikimedia Foundation, 13 Apr. 2022, https://en.wikipedia.org/wiki/CREB. 
 - Sassone-Corsi, Paolo. “The cyclic AMP pathway.” Cold Spring Harbor perspectives in biology vol. 4,12 a011148. 1 Dec. 2012, doi:10.1101/cshperspect.a011148
 - Mayr, B., Montminy , M. Transcriptional regulation by the phosphorylation-dependent factor CREB. Nat Rev Mol Cell Biol 2, 599–609 (2001). https://doi.org/10.1038/35085068
 - Shaukat, Ammad et al. “Interplay Between BALL and CREB Binding Protein Maintains H3K27 Acetylation on Active Genes in Drosophila.” Frontiers in cell and developmental biology vol. 9 740866. 28 Sep. 2021, doi:10.3389/fcell.2021.740866
-- https://www.encodeproject.org
-- https://www.genecards.org/
+- Encode, https://www.encodeproject.org/.
+- Database, GeneCards Human Gene. “Genecards®: The Human Gene Database.” GeneCards, https://www.genecards.org/. 
