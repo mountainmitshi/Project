@@ -153,6 +153,42 @@ CREB3 again shows broader peaks along with EP300 and HDAC2 while CREB1, CREB3L1,
 
 Clusters 3 and 4 seem to have the strongest association with most of the factors.
 
+# Enrichment analysis
+
+We decided to do an enrichment analysis of all of this to see if it tells us something. We do it for cluster 4, as it shows the highest signals and cluster 3 seems to be rather similar.
+
+
+```{r}
+# we first split the regions by cluster:
+split_regions_cf <- split(merged_peaks_cf, cl_2)
+# sending the data to the server
+job_cf <- submitGreatJob(split_regions_cf[["4"]], merged_peaks_cf, species="hg38")
+#Human GRCh38/hg38 is the genome we used
+job_cf
+# we fetch the data back
+res_cf <- getEnrichmentTables(job_cf)
+names(res_cf)
+```
+
+## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 4
+
+```{r, fig.width=9, fig.height=6}
+# looking at the biological processes
+bp_cf <- res_cf$`GO Biological Process`
+head(bp_cf)
+# reorder it from most to least statistically significant before being alphabetically ordered.
+ggplot(head(bp_cf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at the molecular function
+mf_cf <- res_cf$`GO Molecular Function`
+head(mf_cf)
+ggplot(head(mf_cf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at cellular components
+cc_cf <- res_cf$`GO Cellular Component`
+ggplot(head(cc_cf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+```
+
 ```{r}
 sessionInfo()
 ```
