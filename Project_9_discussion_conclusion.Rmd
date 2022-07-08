@@ -9,5 +9,6 @@ output: html_document
 
 Mention that we compared what we found out about CREB1 matches what has previously been found out about CREB1, so our results for the other CREB family members could be more valid.
 
+Much less signal on chromosome 22 than chromosome 1 because of the chromosome size.
 
 # Conclusion
