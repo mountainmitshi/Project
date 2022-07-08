@@ -256,7 +256,9 @@ merged_peaks_cf_22$cluster <- cl_2_22
 
 ```{r}
 set.seed(124)
-plotEnrichedHeatmaps(m_creb1_cf_22[1:6], row_split = cl_2_22, scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf_22[7:9], row_split = cl_2_22, scale_title="density\nothers", row_title="Approach 1 with clusters")
+set.seed(124)
+mycolors_3 <- c("1"="yellow", "2"="orange", "3"="red", "4"="purple", "5"="green", "6"="blue", "7"="black")
+plotEnrichedHeatmaps(m_creb1_cf_22[1:6], row_split = cl_2_22, scale_title="density\nCREB members", colors=c("white","darkred"), mean_color=mycolors_3, row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf_22[7:9], row_split = cl_2_22, scale_title="density\nothers", mean_color=mycolors_3, row_title="Approach 1 with clusters")
 ```
 
 Interpret this.
