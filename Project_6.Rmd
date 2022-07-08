@@ -136,6 +136,10 @@ regionUpset(listofRegions_22, reference = peaks_creb5_chr22)
 ```
 ## Explain how these plots make sense? How do they compare to chr1?
 
+In comparison to chromosome 1 there are a lot fewer intersections of the CREB family members on chromosome 22. CREB3 seems to be less expressed on chromosome 22 compared to chromosome 1, which also leads to smaller intersection sizes with other family members.
+
+The patterns of the restricted plots are also very similar with the exception of CREB5 which has more intersections with CREB3 and CREB1 than with CREB3L1 but the numbers are very close.
+
 # Adding the cofactors and one acetylation to the analysis
 
 ```{r}
