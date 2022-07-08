@@ -139,15 +139,19 @@ merged_peaks_cf$cluster <- cl_2
 ```
 ```{r}
 set.seed(124)
-plotEnrichedHeatmaps(m_creb1_cf[1:6], row_split = cl_2, scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf[7:9], row_split = cl_2, scale_title="density\nothers", row_title="Approach 1 with clusters")
+mycolors_2 <- c("1"="yellow", "2"="orange", "3"="red", "4"="purple", "5"="green")
+plotEnrichedHeatmaps(m_creb1_cf[1:6], row_split = cl_2, scale_title="density\nCREB members", colors=c("white","darkred"), mean_color=mycolors_2, row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf[7:9], row_split = cl_2, scale_title="density\nothers", mean_color=mycolors_2, row_title="Approach 1 with clusters")
 ```
 
-In this combined heatmap you can see the 5 clusters with enhanced visibility through 2 color schemes.
+In this combined heatmap you can see the 5 clusters with enhanced visibility through 2 color schemes with additionally colored curves at the top.
 Overall you can say that H3K27ac is best visible in clusters 3 and 4 and has medium visibility in cluster 1.
 Where the acetylation is strong, also CREB1, CREB3, and CREB3L1 are strongly represented.
-HDAC2 shows a pretty constant rather weak presence. 
+HDAC2 and EP300 show a pretty constant rather weak presence, that is a bit enhanced in Clusters 3 and 4
 CREBBP seems to be rather absent, so is JUN (very weak presence in clusters 3 and 4).
 CREB5 as can be guessed shows rather low signal, a bit higher in cluster 2, 3 and 4.
+CREB3 again shows broader peaks along with EP300 and HDAC2 while CREB1, CREB3L1, H3K27ac, CREB5 and JUN have more narrow signals.
+
+Clusters 3 and 4 seem to have the strongest association with most of the factors.
 
 ```{r}
 sessionInfo()
