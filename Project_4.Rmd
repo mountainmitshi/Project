@@ -268,7 +268,7 @@ Cluster 7 mainly involves CREB3L and CREB1 as we figured out with our colored en
 - Cellular components: CREB3L1 and CREB1 are mainly found in organelles, nucleus, intracellular membrane bound organelles and into intracellular organelles. 
 
 
-All the results above are to be enjoyed with caution and will be further evaluated and compared with existing knowlege about the different CREB family members in our results and interpretation section. 
+All the results above are to be enjoyed with caution and will be further evaluated and compared with existing knowlege about the different CREB family members in our discussion and conclusion section. 
 
 ```{r}
 sessionInfo()
