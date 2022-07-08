@@ -142,7 +142,12 @@ set.seed(124)
 plotEnrichedHeatmaps(m_creb1_cf[1:6], row_split = cl_2, scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf[7:9], row_split = cl_2, scale_title="density\nothers", row_title="Approach 1 with clusters")
 ```
 
-Interpret this.
+In this combined heatmap you can see the 5 clusters with enhanced visibility through 2 color schemes.
+Overall you can say that H3K27ac is best visible in clusters 3 and 4 and has medium visibility in cluster 1.
+Where the acetylation is strong, also CREB1, CREB3, and CREB3L1 are strongly represented.
+HDAC2 shows a pretty constant rather weak presence. 
+CREBBP seems to be rather absent, so is JUN (very weak presence in clusters 3 and 4).
+CREB5 as can be guessed shows rather low signal, a bit higher in cluster 2, 3 and 4.
 
 ```{r}
 sessionInfo()
