@@ -7,4 +7,7 @@ output: html_document
 
 # Discussion
 
+Mention that we compared what we found out about CREB1 matches what has previously been found out about CREB1, so our results for the other CREB family members could be more valid.
+
+
 # Conclusion
