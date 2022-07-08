@@ -7,7 +7,7 @@ output: html_document
 
 # Install the newest version of epiwraps
 
-```{r}
+```{r, eval=FALSE}
 BiocManager::install("ETHZ-INS/epiwraps")
 ```
 
@@ -29,7 +29,7 @@ The data we use is CREB peaks and signal p-values (CREB1, CREB3, CREB3L1, CREB5)
 ## Downloading CREB peaks
 These are all IDR thresholded bed narrowpeaks, saved in a folder named peaks_creb.
 
-```{r}
+```{r, eval=FALSE}
 dir.create("peaks_creb")
 # CREB1
 download.file("https://www.encodeproject.org/files/ENCFF193LLN/@@download/ENCFF193LLN.bed.gz", dest="peaks_creb/peaks_creb1.bed.gz")
@@ -44,7 +44,7 @@ download.file("https://www.encodeproject.org/files/ENCFF875JMR/@@download/ENCFF8
 ## Downloading CREB signal p-value data
 These are bigwig files saved in a folder named signal_pv_creb.
 
-```{r}
+```{r, eval=FALSE}
 dir.create("signal_pv_creb")
 # CREB1
 download.file("https://www.encodeproject.org/files/ENCFF014CIM/@@download/ENCFF014CIM.bigWig", dest=("signal_pv_creb/signal_pv_creb1.bw"), mode="wb")
@@ -58,9 +58,9 @@ download.file("https://www.encodeproject.org/files/ENCFF335JJU/@@download/ENCFF3
 
 ## Downloading cofactor peaks
 Downloading the peaks of the following cofactors: CREBBP, JUN, EP300 and HDAC2 into a folder named peaks_cofactors.
-Maybe we won't need these - we download them just to be sure.
+Maybe we won't need these - we downloaded them just to be sure.
 
-```{r}
+```{r, eval=FALSE}
 dir.create("peaks_cofactors")
 # CREBBP
 download.file("https://www.encodeproject.org/files/ENCFF532VPN/@@download/ENCFF532VPN.bed.gz", dest="peaks_cofactors/peaks_crebbp.bed.gz")
@@ -75,7 +75,7 @@ download.file("https://www.encodeproject.org/files/ENCFF150FJT/@@download/ENCFF1
 ## Downloading cofactor signal p-value
 Download of cofactor signal p-values (CREBBP, JUN, EP300 and HDAC2) in bigwig format into a folder named signal_pc_covactors.
 
-```{r}
+```{r, eval=FALSE}
 dir.create("signal_pv_cofactors")
 # CREBBP
 download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp.bw", mode="wb")
@@ -90,7 +90,7 @@ download.file("https://www.encodeproject.org/files/ENCFF240UFL/@@download/ENCFF2
 ## Downloading H3K27ac peaks and signal p-value
 Downloading the Acetylation peaks (bed narrow peaks) and p-values (bigwig) of H3K27ac into a folder named H2K27ac.
 
-```{r}
+```{r, eval=FALSE}
 dir.create("H3K27ac")
 # H3K27ac peaks
 download.file("https://www.encodeproject.org/files/ENCFF437DPT/@@download/ENCFF437DPT.bed.gz", dest="H3K27ac/h3k27ac_peaks.bed.gz")
@@ -100,7 +100,7 @@ download.file("https://www.encodeproject.org/files/ENCFF469JMR/@@download/ENCFF4
 # Reading in the peak data
 In this chunk we are reading in the peak data in order to use it later.
 
-```{r}
+```{r, eval=FALSE}
 # CREB peaks
 peaks_creb1 <- import("peaks_creb/peaks_creb1.bed.gz", format="NarrowPeak")
 peaks_creb3 <- import("peaks_creb/peaks_creb3.bed.gz", format="NarrowPeak")
@@ -123,7 +123,7 @@ peaks_h3k27ac <- import("H3K27ac/h3k27ac_peaks.bed.gz", format="NarrowPeak")
 This step is added in order to follow our train of thoughts and process.
 First we downloaded and read everything in without the mode="bw" which does not work on windows. Hence we had to redo this time-consuming step and add the mode.
 
-```{r}
+```{r, eval=FALSE}
 # try something pierre told me to:
 download.file("https://www.encodeproject.org/files/ENCFF783COJ/@@download/ENCFF783COJ.bigWig", dest="signal_pv_cofactors/signal_pv_crebbp.bw", mode="wb")
 # CREB signal p-value
@@ -133,4 +133,9 @@ pv_creb1 <- import.bw("signal_pv_cofactors/signal_pv_crebbp.bw", format="bw")
 
 ```{r}
 sessionInfo()
+```
+
+
+```{r, eval=FALSE}
+save(peaks_creb1, peaks_creb3, peaks_creb3l1, peaks_creb5, peaks_crebbp, peaks_jun, peaks_ep300, peaks_hdac2, peaks_h3k27ac, file="myObjects.RData")
 ```
