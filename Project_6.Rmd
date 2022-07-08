@@ -23,7 +23,7 @@ listofRegions <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=pe
 regionOverlaps(listofRegions)
 regionUpset(listofRegions)
 ```
-Compare them:
+Of course the numbers differ when comparing chromosome 1 to the whole genome but the overall dimensions seem to be very similar.
 
 ## Restricting to CREB1 sites
 
