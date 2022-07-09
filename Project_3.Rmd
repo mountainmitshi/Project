@@ -5,22 +5,21 @@ date: '2022-06-14'
 output: html_document
 ---
 
-load("C:/Users/Sarah.HOME/OneDrive/ETH/Master/Neuro FS22/Bioinformatic approaches to regulatory genomics/Project/myObjects.RData")
+```{r}
+load("objects_p2.RData")
+```
 
 
 ```{r}
 suppressPackageStartupMessages({
   library(GenomicRanges)
   library(epiwraps)
-  library(ggplot2)
-  library(rGREAT)
   library(AnnotationHub)
   library(Rsubread)
   library(rtracklayer)
   library(Biostrings)
   library(Rfastp)
   library(ensembldb)
-  library(bsseq)
   library(BiocParallel)
   library(edgeR)
   library(DMRcate)
@@ -31,7 +30,7 @@ suppressPackageStartupMessages({
 
 Using the functions regionOverlaps and regionUpset we analyse the access of the DNA by the different CREB family members.
 
-First we do everything just for Chromosome 1 to get an idea, then we move on to the whole genome (project part 6).
+First we do everything just for Chromosome 1 to get an idea, then we move on to the whole genome (project_6).
 
 ## Restricting all of the CREB family memeber peaks to just chromosome 1
 
@@ -50,13 +49,13 @@ peaks_creb5_chr1 <- peaks_creb5[seqnames(peaks_creb5)=="chr1"]
 
 First we create an Overlap of the peaks of chromosome 1 of all CREB family members and an Upsetplot of the same regions.
 
-Look at lecture 5 code for this!
-
 ```{r}
 listofRegions <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=peaks_creb3l1_chr1, creb5=peaks_creb5_chr1)
 regionOverlaps(listofRegions)
 regionUpset(listofRegions)
 ```
+
+Figure 3.1 and 3.2: A regionOverlaps and regionUpset plot for all CREB family members for chromosome 1
 
 ## Restricting to CREB1 sites
 
@@ -66,6 +65,8 @@ Here we tried out how the upsetplot changes when we restrict it to CREB1.
 regionUpset(listofRegions, reference = peaks_creb1_chr1)
 ```
 
+Figure 3.3: regionUpset plot restricted to CREB1 sites.
+
 ## Restricting to CREB3 sites
 
 Here we tried out how the upsetplot changes when we restrict it to CREB3.
@@ -74,6 +75,8 @@ Here we tried out how the upsetplot changes when we restrict it to CREB3.
 regionUpset(listofRegions, reference = peaks_creb3_chr1)
 ```
 
+Figure 3.4: regionUpset plot restricted to CREB3 sites
+
 ## Restricting to CREB3L1 sites
 
 Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
@@ -81,18 +84,24 @@ Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
 ```{r}
 regionUpset(listofRegions, reference = peaks_creb3l1_chr1)
 ```
+
+Figure 3.5: regionUpset plot restricted to CREB3L1 sites
+
 ## Restricting to CREB5 sites
+
 Here we tried out how the upsetplot changes when we restrict it to CREB5.
 
 ```{r}
 regionUpset(listofRegions, reference = peaks_creb5_chr1)
 ```
 
+Figure 3.6: regionUpset plot restricted to CREB5 sites.
+
 # How do these plots make sense?
 
 We can see in the RegionOverlap plot that CREB3L1 and CREB1 have the most overlapping regions followed by CREB3L1 and CREB3, then CREB1 and CREB3. CREB5 does not seem to overlap much with any of the other regions.
 
-In the unrestricted RegionUpset these findings are reproduced and you can see additionally that CREB1, CREB3L1 and CREB3 have many common intersections that are shared amongst the 3 of them.
+In the unrestricted RegionUpset these findings are reproduced and you can see additionally that CREB1, CREB3L1 and CREB3 have many common intersections that are shared among the 3 of them.
 CREB1 and CREB3L1 share by far the most intersections.
 
 When restricting the RegionUpset plot to CREB1 you can see that it shares most intersections with CREB3L1 followed by CREB3. The intersection number of CREB3L1, CREB1 and CREB3 is again shown to be quite high.
@@ -106,12 +115,11 @@ CREB5 seems to have very few intersections with the other family members but mos
 Intersection size is generally decreasing in the following order: CREB3L1, CREB1, CREB3, CREB5.
 
 
-
-```{r}
-sessionInfo()
+```{r, eval=FALSE}
+save(peaks_creb1_chr1, peaks_creb3_chr1, peaks_creb5_chr1, peaks_creb3l1_chr1, file="objects_p3.RData")
 ```
 
 
-```{r, eval=FALSE}
-save(peaks_creb1_chr1, peaks_creb3_chr1, peaks_creb5_chr1, peaks_creb3l1_chr1, file="objecs_p3.RData")
+```{r}
+sessionInfo()
 ```

@@ -5,9 +5,13 @@ date: '2022-06-14'
 output: html_document
 ---
 
+```{r}
+load("objects_p3.RData")
+```
+
 # Clustering of the signals and enrichment analysis
 
-Our second approach to compare the different family members with eachother is to cluster the signals and do an enrichment analysis with the clusters. After plotting the signals in a combined heatmap, the signals will be clustered and analyzed in an enrichment analysis.
+Our second approach to compare the different family members with each other is to cluster the signals and do an enrichment analysis with the clusters. After plotting the signals in a combined heatmap, the signals will be clustered and analyzed in an enrichment analysis.
 
 
 ```{r}
@@ -29,6 +33,7 @@ suppressPackageStartupMessages({
 })
 ```
 
+
 ## Plotting the signals
 
 As regions we are going to be using the peaks from the different CREB family members that we downloaded in Project_2 and the tracks are the corresponding signal p-values.
@@ -48,11 +53,13 @@ m_creb1 <- signal2Matrix(pv_list, merged_peaks)
 # maybe set an extend and a width?
 plotEnrichedHeatmaps(m_creb1)
 ```
+
+Figure 4.1: A heatmap of the CREB family member signals.
+
+
 Each row represents the same region across the heatmaps.
 
-Here you can see that there are strongest peaks in CREB3L1, followed by similar looking CREB1 and CREB3 and rather weak looking CREB5.
-
-Analyze this more (not sure if I can speak of strengths of peaks here or what would be correct?).
+Here you can see that there are strongest signals in CREB3L1, followed by similar looking CREB1 and CREB3 and rather weak looking CREB5.
 
 ## Clustering
 
@@ -78,9 +85,10 @@ length(cl)
 merged_peaks$cluster <- cl
 ```
 
+
 ### Plotting the clusters
 
-We can split the rows by clusters to visualize this.
+We can split the rows of a heatmap by clusters to visualize this.
 The meaning of the cluster is dependent on the order of the matrix, which depends on the order of the rows in the regions.
 It's really easy if one generates another regions list that is ordered  and one keeps the same cluster identities everything will be messed up!
 We have to keep in mind that the orders of both of them need to be matched when something is changed.
@@ -90,18 +98,21 @@ Typically when clusters are exhausting most of the pattern in the data, the resu
 set.seed(123)
 plotEnrichedHeatmaps(m_creb1, row_split=cl)
 ```
-Interpretation:
 
-Cluster 1: Strongly represented in CREB1 and CREB3L1.
-Cluster 2: Weak representation in all but CREB3.
-Cluster 3: Medium representation in all but CREB5.
-Cluster 4: Strong in CREB3 and one of the few that is also represented quite strongly in CREB5 (still pretty weak).
-Cluster 5: Strong in CREB1, all the others weak or barely any signal.
-Cluster 6: Strong in CREB1 and CREB3L1.
-Cluster 7: Similar to Cluster 6, a little stronger in CREB3.
-Cluster 8: Strong representation in CREB3 and weak in CREB1.
-Cluster 9: Very strong and broad with few regions in CREB3.
-Cluster 10: Similar to 6 and 7 although a bit stronger.
+Figure 4.2: A heatmap of the CREB family members, split into 10 clusters.
+
+Observations:
+
+- Cluster 1: Strongly represented in CREB1 and CREB3L1.
+- Cluster 2: Weak representation in all but CREB3.
+- Cluster 3: Medium representation in all but CREB5.
+- Cluster 4: Strong in CREB3 and one of the few that is also represented quite strongly in CREB5 (still pretty weak).
+- Cluster 5: Strong in CREB1, all the others weak or barely any signal.
+- Cluster 6: Strong in CREB1 and CREB3L1.
+- Cluster 7: Similar to Cluster 6, a little stronger in CREB3.
+- Cluster 8: Strong representation in CREB3 and weak in CREB1.
+- Cluster 9: Very strong and broad with few regions in CREB3.
+- Cluster 10: Similar to 6 and 7 although a bit stronger.
 
 So overall CREB1 is strongly present 7/10 times, CREB3 5/10 times, CREB3L1 6/10 times and CREB5 has a medium strong to weak presence 2/10 times.
 
@@ -115,6 +126,9 @@ So we set colors.
 mycolors <- c("1"="yellow", "2"="orange", "3"="red", "4"="pink", "5"="purple", "6"="blue", "7"="green", "8"="brown", "9"="gray", "10"="black")
 plotEnrichedHeatmaps(m_creb1, row_split=cl, mean_color=mycolors, trim=c(0.95))
 ```
+
+Figure 4.3: A heatmap of the CREB family members split into 10 clusters, with assigned colors.
+
 
 Now from the curves you can see that CREB1 stands out in cluster 7 and 10, CREB3 in cluster 2, 4 and 9, CREB3L1 in cluster 7 and 10 and CREB5 in cluster 2.
 
@@ -131,11 +145,14 @@ d <- meltSignals(m_creb1, splitBy=cl)
 ggplot(d, aes(position, mean, colour=sample)) + geom_line(size=1.2) + facet_wrap(~split)
 ```
 
+Figure 4.4: Plot of the average signals of the CREB family members split by clusters.
+
+
 These plots are exactly like the plots above the heat maps with the difference that instead of plotting the different lines for one signal together we are plotting the lines for one cluster but different signals together. You can plot whatever you want.
 
 Clustering is dangerous because you might change around factors until you like the result.
 
-From this plot we can generally tell once more that CREB5 is not very strongly involved in any of these peaks. All the other family members have some clusters that they are the strongest representative which means they might be strongly involved in whatever these processes represent.
+From this plot we can generally tell once more that CREB5 is not very strongly involved in any of these peaks. All the other family members have some clusters where they are the strongest representative which means they might be strongly involved in whatever these processes represent.
 
 From these curves and the ones above the heatmap, we decided to further analyse 3 of these 10 clusters - Cluster 2, Cluster 7 and Cluster 9.
 Even though cluster 10 also has strong signals, we decided against further analysis because it looks similar to Cluster 7.
@@ -150,7 +167,7 @@ Find what's enriched in one cluster with respect to the others (first we use clu
 ```{r}
 # we first split the regions by cluster:
 split_regions <- split(merged_peaks, cl)
-# Important: when a job is submitted to GREAT a set of regions, a GRanges object, needs to be submitted BUT there also needs to be some sort of background added to the picture. The elements in a list of regions are always compared to other elements. So we are comparing the regions in cluster 6 with respect to all our other regions.
+# Important: when a job is submitted to GREAT a set of regions, a GRanges object, needs to be submitted BUT there also needs to be some sort of background added to the picture. The elements in a list of regions are always compared to other elements. So we are comparing the regions in cluster 2 with respect to all our other regions.
 # sending the data to the server
 job_2 <- submitGreatJob(split_regions[["2"]], merged_peaks, species="hg38")
 #Human GRCh38/hg38 is the genome we used
@@ -159,6 +176,7 @@ job_2
 res_2 <- getEnrichmentTables(job_2)
 names(res_2)
 ```
+
 Molecular function is about being enzymes, signalling proteins, biological process is what they are involved in and cellular component is where they work. This gives us an overview.
 
 ## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 2
@@ -179,15 +197,22 @@ ggplot(head(mf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), siz
 cc <- res_2$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
+
+Figure 4.5a: Plot of the top biological processes of cluster 2.
+Figure 4.5b: Plot of the top molecular functions of cluster 2.
+Figure 4.5c: Plot of the top cellular components of cluster 2.
+
+
 We get different genotology terms and it is telling us how many regions in our background are associated with this term and how many regions in our foreground, so the genes of interest are associated with this.
 Fold Enrichment is how much more we have in our region of interest than in the background.
 
 On the x-axis is the strength of enrichment and the color of the dot represents its significance.
 Smaller sets need more enrichment in order to be significant than large sets. That's why we look at both the significance and the fold enrichment which indicates the magnitude of enrichment.
+
 Disclaimer: not everything makes sense because the same genes get reused in many biological processes, but we can learn something about what the clusters do.
 
 Here we analyzed cluster 2 which involves mainly CREB3, so looking at our plots we can get an idea of how CREB3 is involved in following processes in the cell. 
-- Biological processes: We can see a relative high probability that cluster 2 is involved in response to stimulus, phosphorouse metabolic processes and positive regulation of cell differentiation. 
+- Biological processes: We can see a relatively high probability that cluster 2 is involved in response to stimulus, phosphorouse metabolic processes and positive regulation of cell differentiation. 
 - Molecular function: Cluster 2 seems to be relatively highly involved in small molecule binding, identical protein binding, transcription factor activity and transcription factor binding as well as protein binding. 
 - Cellular components: Cluster 2 can mainly be found in the cell, cell parts, cytoplasm, nuclear lumen and parts of the membrane. 
 
@@ -204,6 +229,7 @@ job_9
 res_9 <- getEnrichmentTables(job_9)
 names(res_9)
 ```
+
 ## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 9
 
 ```{r, fig.width=9, fig.height=6}
@@ -223,11 +249,16 @@ cc <- res_9$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
 
+Figure 4.6a: Plot of the top biological processes of cluster 9.
+Figure 4.6b: Plot of the top molecular functions of cluster 9.
+Figure 4.6c: Plot of the top cellular components of cluster 9.
+
+
 Cluster 9 mainly involves CREB3 and CREB3L1 so looking at the plots we can see how these are involved in following functions.
 
 - Biological processes: Cluster 9 seems to be highly involved in protein complex biogenesis, protein complex assebly as well as protein targeting and establishment of protein localization to organelle. 
 - Molecular function: Looking at the Enrichement plot we can see that cluster 9 has molecular functions in active transmembrane transporter activity, cofactor binding, peptide binding as well as amide binding. 
-- Cellular components: Cluster 9 can mainly be found in Organells, extracellular regions and parts of extracellular regions. 
+- Cellular components: Cluster 9 can mainly be found in Organelles, extracellular regions and parts of extracellular regions. 
 
 ### Do another Cluster - Cluster 7
 
@@ -261,6 +292,12 @@ cc <- res_7$`GO Cellular Component`
 ggplot(head(cc,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
 
+Figure 4.7a: Plot of the top biological processes of cluster 7.
+Figure 4.7b: Plot of the top molecular functions of cluster 7.
+Figure 4.7c: Plot of the top cellular components of cluster 7.
+
+
+
 Cluster 7 mainly involves CREB3L and CREB1 as we figured out with our colored enriched Heatmaps so the following functions may be tightly correlated with CREB3L and CREB1. 
 
 - Biological processes: Cluster 7 seems to play a role in cell cylce and glycosal compound metabolic process. 
@@ -268,7 +305,7 @@ Cluster 7 mainly involves CREB3L and CREB1 as we figured out with our colored en
 - Cellular components: CREB3L1 and CREB1 are mainly found in organelles, nucleus, intracellular membrane bound organelles and into intracellular organelles. 
 
 
-All the results above are to be enjoyed with caution and will be further evaluated and compared with existing knowlege about the different CREB family members in our discussion and conclusion section. 
+All the results above are to be enjoyed with caution and will be further evaluated and compared with existing knowledge about the different CREB family members in our discussion and conclusion section.
 
 ```{r}
 sessionInfo()

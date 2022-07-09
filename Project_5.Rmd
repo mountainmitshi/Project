@@ -5,7 +5,36 @@ date: '2022-06-14'
 output: html_document
 ---
 
+```{r}
+load("objects_p2.RData")
+```
+
+```{r}
+load("objects_p3.RData")
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(epiwraps)
+  library(ggplot2)
+  library(rGREAT)
+  library(AnnotationHub)
+  library(Rsubread)
+  library(rtracklayer)
+  library(Biostrings)
+  library(Rfastp)
+  library(ensembldb)
+  library(bsseq)
+  library(BiocParallel)
+  library(edgeR)
+  library(DMRcate)
+})
+```
+
 # Adding the cofactors and one acetylation to the analysis
+
+## Restricting regions to chromosome 1
 
 ```{r}
 # get the regions on the cofactors and the methylation for just chromosome 1
@@ -31,6 +60,11 @@ listofRegions_cf <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1
 regionOverlaps(listofRegions_cf)
 regionUpset(listofRegions_cf)
 ```
+
+Figure 5.1a: A regionOverlaps plot of all CREB family members, cofactors and the acetylation
+Figure 5.1b: A regionUpset plot of all CREB family members, cofactors and the acetylation
+
+
 What stands out in the RegionOverlaps plot is that the cofactors overlap strongly with one another and the overlaps of the cofactors with the CREB family members is in around the same dimension except for CREB5, which shows lower overlaps.
 CREBBP seems to have not very many overlapping regions with anything.
 
@@ -39,7 +73,7 @@ The RegionUpset plot shows that the acetylations have by far the biggest interse
 ### Creating different regionOverlap plots and regionUpset plots to see it more clearly
 
 Following we are creating more specific plots by focusing on one cofactor or acetylation. We add our focus into the list of CREB family members and leave the others away.
-To analyze these we can set the reference to different CREB family members which might give us some different information.
+To analyze these we can set the reference to different cofactors which might give us some different information.
 
 ```{r}
 # CREBBP
@@ -47,6 +81,11 @@ listofRegions_crebbp <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, cre
 regionOverlaps(listofRegions_crebbp)
 regionUpset(listofRegions_crebbp, reference = peaks_crebbp_chr1)
 ```
+
+Figure 5.2a: A regionOverlaps plot of all CREB family members plus CREBBP
+Figure 5.2b: A regionUpset plot of all CREB family members plus CREBBP
+
+
 CREBBP seems not to have very many overlaps with any of the CREB family members on chromosome 1.
 
 ```{r}
@@ -55,6 +94,11 @@ listofRegions_jun <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l
 regionOverlaps(listofRegions_jun)
 regionUpset(listofRegions_jun, reference = peaks_jun_chr1)
 ```
+
+Figure 5.3a: A regionOverlaps plot of all CREB family members plus JUN
+Figure 5.3b: A regionUpset plot of all CREB family members plus JUN
+
+
 JUN has most overlaps with CREB1 and CREB3L1.
 
 
@@ -64,6 +108,11 @@ listofRegions_ep300 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb
 regionOverlaps(listofRegions_ep300)
 regionUpset(listofRegions_ep300, reference = peaks_ep300_chr1)
 ```
+
+Figure 5.4a: A regionOverlaps plot of all CREB family members plus EP300
+Figure 5.4b: A regionUpset plot of all CREB family members plus EP300
+
+
 EP300 seems to have intersections with all CREB family members, most with CREB1, then CREB3L1, then CREB3 and even with CREB5.
 
 ```{r}
@@ -72,6 +121,11 @@ listofRegions_hdac2 <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb
 regionOverlaps(listofRegions_hdac2)
 regionUpset(listofRegions_hdac2, reference = peaks_hdac2_chr1)
 ```
+
+Figure 5.5a: A regionOverlaps plot of all CREB family members plus HDAC2
+Figure 5.5b: A regionUpset plot of all CREB family members plus HDAC2
+
+
 HDAC2 has a similar overlap pattern to EP300.
 
 ```{r}
@@ -85,6 +139,12 @@ listofRegions_h3k27ac_2 <- list(crebbp=peaks_crebbp_chr1, jun=peaks_jun_chr1, ep
 regionOverlaps(listofRegions_h3k27ac_2)
 regionUpset(listofRegions_h3k27ac_2, reference = peaks_h3k27ac_chr1)
 ```
+
+Figure 5.6a: A regionOverlaps plot of all CREB family members plus H3K27ac
+Figure 5.6b: A regionUpset plot of all CREB family members plus H3K27ac
+Figure 5.6c: A regionOverlaps plot of all cofactors plus H3K27ac
+Figure 5.6d: A regionUpset plot of all cofactors plus H3K27ac
+
 
 H3K27ac seems to intersect most with CREB1, then CREB3L1, CREB3 and barely with CREB5. From the cofactors it has noticeable intersections with hdac2 and ep300.
 
@@ -103,8 +163,11 @@ pv_list_cf <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_c
 # we obtain the matrix of the signal around the regions:
 m_creb1_cf <- signal2Matrix(pv_list_cf, merged_peaks_cf)
 # maybe set an extend and a width?
-plotEnrichedHeatmaps(m_creb1_cf, row_title="Clustered analysis")
+plotEnrichedHeatmaps(m_creb1_cf, row_title="Combined heatmap")
 ```
+
+Figure 5.7: A heatmap of all the CREB family members with the cofactors and the acetylation.
+
 
 As you can see in the average plots, the basic normalization based on library size wasn't quite sufficient. While the size of the peak in the middle depends on the amount of the protein, we would expect the background around it to flatten to a similar level across experiments, which isn't the case.
 
@@ -118,6 +181,8 @@ The first approach is to plot two groups of experiments seperately, so that they
 plotEnrichedHeatmaps(m_creb1_cf[1:6], scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1") + plotEnrichedHeatmaps(m_creb1_cf[7:9], scale_title="density\nothers", row_title="Approach 1")
 ```
 
+Figure 5.8: Approach 1 to correct the heatmap
+
 ### Approach 2: Re-normalization
 
 The second approach is to re-normalize the signals. This can be done with the function renormalizeBorders (2a).
@@ -126,6 +191,8 @@ The second approach is to re-normalize the signals. This can be done with the fu
 # Approach 2a
 plotEnrichedHeatmaps(renormalizeBorders(m_creb1_cf), row_title = "Approach 2")
 ```
+
+Figure 5.9: Approach 2 to correct the heatmap
 
 Approach 1 shows more clearly what we want to see, so we continue with that approach.
 
@@ -143,10 +210,14 @@ mycolors_2 <- c("1"="yellow", "2"="orange", "3"="red", "4"="purple", "5"="green"
 plotEnrichedHeatmaps(m_creb1_cf[1:6], row_split = cl_2, scale_title="density\nCREB members", colors=c("white","darkred"), mean_color=mycolors_2, row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf[7:9], row_split = cl_2, scale_title="density\nothers", mean_color=mycolors_2, row_title="Approach 1 with clusters")
 ```
 
+Figure 5.10: The combined heatmap with clusters
+
+
 In this combined heatmap you can see the 5 clusters with enhanced visibility through 2 color schemes with additionally colored curves at the top.
+
 Overall you can say that H3K27ac is best visible in clusters 3 and 4 and has medium visibility in cluster 1.
 Where the acetylation is strong, also CREB1, CREB3, and CREB3L1 are strongly represented.
-HDAC2 and EP300 show a pretty constant rather weak presence, that is a bit enhanced in Clusters 3 and 4
+HDAC2 and EP300 show a pretty constant rather weak presence, that is a bit enhanced in Clusters 3 and 4.
 CREBBP seems to be rather absent, so is JUN (very weak presence in clusters 3 and 4).
 CREB5 as can be guessed shows rather low signal, a bit higher in cluster 2, 3 and 4.
 CREB3 again shows broader peaks along with EP300 and HDAC2 while CREB1, CREB3L1, H3K27ac, CREB5 and JUN have more narrow signals.
@@ -188,6 +259,11 @@ ggplot(head(mf_cf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), 
 cc_cf <- res_cf$`GO Cellular Component`
 ggplot(head(cc_cf,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
 ```
+
+Figure 5.11a: Top biological processes for cluster 4
+Figure 5.11b: Top molecular functions for cluster 4
+Figure 5.11c: Top cellular components for cluster 4
+
 
 ```{r}
 sessionInfo()

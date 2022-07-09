@@ -5,6 +5,30 @@ date: '2022-06-16'
 output: html_document
 ---
 
+```{r}
+load("objects_p2.RData")
+load("objects_p3.RData")
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(epiwraps)
+  library(ggplot2)
+  library(rGREAT)
+  library(AnnotationHub)
+  library(Rsubread)
+  library(rtracklayer)
+  library(Biostrings)
+  library(Rfastp)
+  library(ensembldb)
+  library(bsseq)
+  library(BiocParallel)
+  library(edgeR)
+  library(DMRcate)
+})
+```
+
 # Doing the previous things for the whole genome
 
 We are trying to do this for the whole genome:
@@ -14,6 +38,11 @@ listofRegions_whole <- list(creb1=peaks_creb1, creb3=peaks_creb3, creb3l1=peaks_
 regionOverlaps(listofRegions_whole)
 regionUpset(listofRegions_whole)
 ```
+
+Figure 6.1a: A regionOverlaps plot of the CREB family members for the whole genome
+Figure 6.1b: A regionUpset plot of the CREB family members for the whole genome
+
+
 ## Comparison to chromosome 1
 
 In order to be able to compare it better to what only chromosome 1 looked like, we are adding the chromosome 1 UpsetPlot here as well.
@@ -23,6 +52,10 @@ listofRegions <- list(creb1=peaks_creb1_chr1, creb3=peaks_creb3_chr1, creb3l1=pe
 regionOverlaps(listofRegions)
 regionUpset(listofRegions)
 ```
+
+Figure 6.2: The plots from chromosome 1 again for comparison
+
+
 Of course the numbers differ when comparing chromosome 1 to the whole genome but the overall dimensions seem to be very similar.
 
 ## Restricting to CREB1 sites
@@ -32,6 +65,9 @@ Here we tried out how the upsetplot changes when we restrict it to CREB1.
 ```{r}
 regionUpset(listofRegions_whole, reference = peaks_creb1)
 ```
+
+Figure 6.3: A regionUpset plot of the CREB family members of the whole genome restricted to CREB1 sites.
+
 ## Restricting to CREB3 sites
 
 Here we tried out how the upsetplot changes when we restrict it to CREB3.
@@ -40,13 +76,7 @@ Here we tried out how the upsetplot changes when we restrict it to CREB3.
 regionUpset(listofRegions_whole, reference = peaks_creb3)
 ```
 
-## Restricting to CREB3L1 sites
-
-Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
-
-```{r}
-regionUpset(listofRegions_whole, reference = peaks_creb3l1)
-```
+Figure 6.4: A regionUpset plot of the CREB family members of the whole genome restricted to CREB3 sites.
 
 ## Restricting to CREB3L1 sites
 
@@ -55,6 +85,9 @@ Here we tried out how the upsetplot changes when we restrict it to CREB3L1.
 ```{r}
 regionUpset(listofRegions_whole, reference = peaks_creb3l1)
 ```
+
+Figure 6.5: A regionUpset plot of the CREB family members of the whole genome restricted to CREB3L1 sites.
+
 
 ## Restricting to CREB5 sites
 Here we tried out how the upsetplot changes when we restrict it to CREB5.
@@ -62,6 +95,9 @@ Here we tried out how the upsetplot changes when we restrict it to CREB5.
 ```{r}
 regionUpset(listofRegions_whole, reference = peaks_creb5)
 ```
+
+Figure 6.6: A regionUpset plot of the CREB family members of the whole genome restricted to CREB5 sites.
+
 # How do these plots make sense?
 
 Looking at the plots above we can find the most interactions between CREB1 and CREB3l1, followed by CREB3 and CREB3l1, the least interactions are found with CREB5, which mainly interacts with CREB3. 
@@ -74,7 +110,7 @@ Looking at the plots above we can find the most interactions between CREB1 and C
 # create a list with all the peaks on the whole genome
 peak_list_whole <- GRangesList("Peaks CREB1"=peaks_creb1, "Peaks CREB3"=peaks_creb3, "Peaks CREB3L1"=peaks_creb3l1, "Peaks CREB5"=peaks_creb5, compress=TRUE)
 # merge the peaks together to create one list of non-overlapping regions
-merged_peaks_whole <- reduce(unlist(peak_list))
+merged_peaks_whole <- reduce(unlist(peak_list_whole))
 # make a list of the signal p-values
 pv_list_whole <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw")
 # we obtain the matrix of the signal around the regions:
@@ -82,6 +118,9 @@ m_creb1_whole <- signal2Matrix(pv_list_whole, merged_peaks_whole)
 # maybe set an extend and a width?
 plotEnrichedHeatmaps(m_creb1_whole)
 ```
+
+Figure 6.7: A heatmap of the signals from the whole genome for the CREB family members
+
 
 Here comes up the question how you want to analyze the whole genome. Going off of the whole genome for the heatmaps altogether makes not so much sense, since then you cannot divide it up into logical groups or assign it back to the original genome. So it would make more sense to cluster gene after gene and then compare them to eachother.
 
@@ -111,11 +150,16 @@ regionOverlaps(listofRegions_22)
 regionUpset(listofRegions_22)
 ```
 
+Figure 6.8a: A regionOverlaps plot for chromosome 22
+Figure 6.8b: A regionUpset plot for chromosome 22
+
 # Restricting to CREB1
 
 ```{r}
 regionUpset(listofRegions_22, reference = peaks_creb1_chr22)
 ```
+
+Figure 6.9: A regionUpset plot for chromosome 22 restricted to CREB1
 
 ## Restricting to CREB3 sites
 
@@ -123,17 +167,24 @@ regionUpset(listofRegions_22, reference = peaks_creb1_chr22)
 regionUpset(listofRegions_22, reference = peaks_creb3_chr22)
 ```
 
+Figure 6.10: A regionUpset plot for chromosome 22 restricted to CREB3
+
 ## Restricting to CREB3L1 sites
 
 ```{r}
 regionUpset(listofRegions_22, reference = peaks_creb3l1_chr22)
 ```
 
+Figure 6.11: A regionUpset plot for chromosome 22 restricted to CREB3L1
+
 ## Restricting to CREB5 sites
 
 ```{r}
 regionUpset(listofRegions_22, reference = peaks_creb5_chr22)
 ```
+
+Figure 6.12: A regionUpset plot for chromosome 22 restricted to CREB5
+
 ## Explain how these plots make sense? How do they compare to chr1?
 
 In comparison to chromosome 1 there are a lot fewer intersections of the CREB family members on chromosome 22. CREB3 seems to be less expressed on chromosome 22 compared to chromosome 1, which also leads to smaller intersection sizes with other family members.
@@ -141,6 +192,101 @@ In comparison to chromosome 1 there are a lot fewer intersections of the CREB fa
 The patterns of the restricted plots are also very similar with the exception of CREB5 which has more intersections with CREB3 and CREB1 than with CREB3L1 but the numbers are very close.
 
 Here we tried to add clustering and enrichment analysis of these signals but R didn't cooperate. We got an error that some of the files didn't exist, even though we created the files in the same chunk, just like the other times before. We didn't find a solution for this problem, so we let it be.
+
+This did not work:
+# Clustering of the signals and enrichment analysis of chromosome 22
+
+## Plotting the signals
+
+```{r, eval=FALSE}
+# create a list with all the peaks on chromosome 22
+peak_list_22 <- GRangesList("Peaks CREB1"=peaks_creb1_chr22, "Peaks CREB3"=peaks_creb3_chr22, "Peaks CREB3L1"=peaks_creb3l1_chr22, "Peaks CREB5"=peaks_creb5_chr22, compress=TRUE)
+# merge the peaks together to create one list of non-overlapping regions
+merged_peaks_22 <- reduce(unlist(peak_list_22))
+# make a list of the signal p-values
+pv_list_22 <- list(CREB1="signal_pv_creb/signal_pv_creb1.bw.bw", CREB3="signal_pv_creb/signal_pv_creb3.bw", CREB3L1="signal_pv_creb/signal_pv_creb3l1.bw", CREB5="signal_pv_creb/Signal_pv_creb5.bw")
+# we obtain the matrix of the signal around the regions:
+m_creb1_22 <- signal2Matrix(pv_list_22, merged_peaks_22)
+plotEnrichedHeatmaps(m_creb1_22)
+```
+
+Hence this did not work and the following steps up to #Adding the cofactors and one acetylation tot he analysis DID NOT WORK
+## Clustering
+
+```{r, eval=FALSE}
+cl_22 <- clusterSignalMatrices(m_creb1_22, k=10)
+# with 5 clusters 73% of the variance is explained by clusters
+# with 4 clusters 64 % of the variance is explained by clusters
+# with 6 clusters 77%
+# with 7 clusters 80%
+# with 8 clusters 82%
+# with 9 clusters 84%
+# with 10 clusters 85%
+# with 11 clusters 86%
+# so let's go with 10 clusters and see what we can tell.
+table(cl_22)
+head(cl_22)
+length(cl_22)
+# The numbers at [1] tell you where your regions are: first region is in cluster 10 with 303 elements
+merged_peaks_22$cluster <- cl_22
+```
+
+
+### Plotting the clusters
+
+```{r, eval=FALSE}
+set.seed(123)
+plotEnrichedHeatmaps(m_creb1_22, row_split=cl_22)
+```
+
+#### Adding colors
+
+```{r, eval=FALSE}
+# create a vector of colors and have as names of the vector the names of our clusters (in this case just numbers).
+mycolors <- c("1"="yellow", "2"="orange", "3"="red", "4"="pink", "5"="purple", "6"="blue", "7"="green", "8"="brown", "9"="gray", "10"="black")
+plotEnrichedHeatmaps(m_creb1_22, row_split=cl_22, mean_color=mycolors, trim=c(0.95))
+```
+
+## Plotting just the averages
+
+```{r, eval=FALSE}
+d_22 <- meltSignals(m_creb1_22, splitBy=cl)
+ggplot(d_22, aes(position, mean, colour=sample)) + geom_line(size=1.2) + facet_wrap(~split)
+```
+
+# Enrichment analysis
+
+```{r, eval=FALSE}
+# we first split the regions by cluster:
+split_regions_22 <- split(merged_peaks_22, cl_22)
+# Important: when a job is submitted to GREAT a set of regions, a GRanges object, needs to be submitted BUT there also needs to be some sort of background added to the picture. The elements in a list of regions are always compared to other elements. So we are comparing the regions in cluster 6 with respect to all our other regions.
+# sending the data to the server
+job_22 <- submitGreatJob(split_regions_22[["2"]], merged_peaks_22, species="hg38")
+#Human GRCh38/hg38 is the genome we used
+job_22
+# we fetch the data back
+res_22 <- getEnrichmentTables(job_22)
+names(res_22)
+```
+
+## Plotting the top Biological Processes, molecular functions and cellular components of Cluster 2
+
+```{r, eval=FALSE, fig.width=9, fig.height=6}
+# looking at the biological processes
+bp_22 <- res_2$`GO Biological Process`
+head(bp_22)
+# reorder it from most to least statistically significant before being alphabetically ordered.
+ggplot(head(bp_22,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at the molecular function
+mf_22 <- res_2$`GO Molecular Function`
+head(mf_22)
+ggplot(head(mf_22,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+
+# looking at cellular components
+cc_22 <- res_2$`GO Cellular Component`
+ggplot(head(cc_22,20), aes(Hyper_Fold_Enrichment, reorder(name, Hyper_Adjp_BH), size=Hyper_Foreground_Region_Hits, color=-log10(Hyper_Adjp_BH))) + geom_point() + scale_color_viridis_c()
+```
 
 # Adding the cofactors and one acetylation to the analysis
 
@@ -168,6 +314,10 @@ regionOverlaps(listofRegions_cf_22)
 regionUpset(listofRegions_cf_22)
 ```
 
+Figure 6.13a: A regionOverlaps plot for CREB family members plus cofactors and acetylation for chromosome 22
+Figure 6.13b: A regionUpset plot for CREB family members plus cofactors and acetylation for chromosome 22
+
+
 What stands out in this RegionOverlaps plot is that the cofactor hdac2 overlaps strongly with the acetylation h3k27ac. 
 
 CREB5 seems to have the least overlaps.
@@ -186,6 +336,9 @@ regionOverlaps(listofRegions_crebbp_22)
 regionUpset(listofRegions_crebbp_22, reference = peaks_crebbp_chr22)
 ```
 
+Figure 6.14a: A regionOverlaps plot for CREB family members plus CREBBP for chromosome 22
+Figure 6.14b: A regionUpset plot for CREB family members plus CREBBP for chromosome 22
+
 CREBBP seems not to have very many overlaps with any of the CREB family members on chromosome 22.
 
 ```{r}
@@ -194,6 +347,10 @@ listofRegions_jun_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22, c
 regionOverlaps(listofRegions_jun_22)
 regionUpset(listofRegions_jun_22, reference = peaks_jun_chr22)
 ```
+
+Figure 6.15a: A regionOverlaps plot for CREB family members plus JUN for chromosome 22
+Figure 6.15b: A regionUpset plot for CREB family members plus JUN for chromosome 22
+
 JUN seems not to have very many overlaps with any of the CREB family members on chromosome 22.
 
 ```{r}
@@ -202,6 +359,11 @@ listofRegions_ep300_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22,
 regionOverlaps(listofRegions_ep300_22)
 regionUpset(listofRegions_ep300_22, reference = peaks_ep300_chr22)
 ```
+
+Figure 6.16a: A regionOverlaps plot for CREB family members plus EP300 for chromosome 22
+Figure 6.16b: A regionUpset plot for CREB family members plus EP300 for chromosome 22
+
+
 EP300 also seems to have little intersections with the CREB family members but most with CREB1. 
 
 ```{r}
@@ -210,6 +372,10 @@ listofRegions_hdac2_22 <- list(creb1=peaks_creb1_chr22, creb3=peaks_creb3_chr22,
 regionOverlaps(listofRegions_hdac2_22)
 regionUpset(listofRegions_hdac2_22, reference = peaks_hdac2_chr22)
 ```
+
+Figure 6.17a: A regionOverlaps plot for CREB family members plus HDAC2 for chromosome 22
+Figure 6.17b: A regionUpset plot for CREB family members plus HDAC2 for chromosome 22
+
 
 HDAC2 seems to have most intersections with the CREB family members especially CREB1 followed by CREB3l1. 
 
@@ -220,6 +386,11 @@ regionOverlaps(listofRegions_h3k27ac_22)
 regionUpset(listofRegions_h3k27ac_22, reference = peaks_h3k27ac_chr22)
 regionUpset(listofRegions_h3k27ac_22, reference = peaks_creb1_chr22)
 ```
+
+Figure 6.18a: A regionOverlaps plot for CREB family members plus H3K27ac for chromosome 22
+Figure 6.18b: A regionUpset plot for CREB family members plus H3K27ac for chromosome 22
+
+
 H3K27ac seems to intersect most with CREB3l1 and CREB1 then CREB3, and barely with CREB5.
 
 ## Doing analysis according to clusters
@@ -239,6 +410,9 @@ m_creb1_cf_22 <- signal2Matrix(pv_list_cf, merged_peaks_cf_22)
 plotEnrichedHeatmaps(m_creb1_cf_22, row_title="Clustered analysis")
 ```
 
+Figure 6.19: A heatmap of all the CREB family members plus cofactors and acetylation for chromosome 22.
+
+
 Following we only proceed with the first approach of plotting groups of experiments and combining them.
 
 ## Reusing approach 1 from before
@@ -248,6 +422,8 @@ The first approach is to plot two groups of experiments seperately, so that they
 ```{r}
 plotEnrichedHeatmaps(m_creb1_cf_22[1:6], scale_title="density\nCREB members", colors=c("white","darkred"), row_title="Approach 1") + plotEnrichedHeatmaps(m_creb1_cf_22[7:9], scale_title="density\nothers", row_title="Approach 1")
 ```
+
+Figure 6.20: Approach 1 for chromosome 22
 
 ### Cluster
 
@@ -262,12 +438,11 @@ merged_peaks_cf_22$cluster <- cl_2_22
 
 ```{r}
 set.seed(124)
-set.seed(124)
 mycolors_3 <- c("1"="yellow", "2"="orange", "3"="red", "4"="purple", "5"="green", "6"="blue", "7"="black")
 plotEnrichedHeatmaps(m_creb1_cf_22[1:6], row_split = cl_2_22, scale_title="density\nCREB members", colors=c("white","darkred"), mean_color=mycolors_3, row_title="Approach 1 with clusters") + plotEnrichedHeatmaps(m_creb1_cf_22[7:9], row_split = cl_2_22, scale_title="density\nothers", mean_color=mycolors_3, row_title="Approach 1 with clusters")
 ```
 
-Interpret this.
+Figure 6.21: A heatmap of the CREB family members and cofactors and acetylation for chromosome 22 split up into 7 clusters.
 
 ```{r}
 sessionInfo()
